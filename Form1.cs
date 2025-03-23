@@ -5,6 +5,11 @@ namespace ChessApp
         public Form1()
         {
             InitializeComponent();
+
+           
+
         }
+
+
     }
 }

@@ -30,7 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             pictureBox1 = new PictureBox();
-            play_button = new Button();
+            roundButton1 = new RoundButton();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -44,19 +44,20 @@
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             // 
-            // play_button
+            // roundButton1
             // 
-            play_button.BackColor = Color.FromArgb(132, 221, 99);
-            play_button.FlatAppearance.BorderSize = 0;
-            play_button.FlatStyle = FlatStyle.Flat;
-            play_button.Font = new Font("Arial", 15F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            play_button.ForeColor = Color.White;
-            play_button.Location = new Point(568, 540);
-            play_button.Name = "play_button";
-            play_button.Size = new Size(784, 62);
-            play_button.TabIndex = 1;
-            play_button.Text = "Play";
-            play_button.UseVisualStyleBackColor = false;
+            roundButton1.BackColor = Color.FromArgb(132, 221, 99);
+            roundButton1.BorderColor = Color.Transparent;
+            roundButton1.CornerRadius = 20;
+            roundButton1.FlatStyle = FlatStyle.Flat;
+            roundButton1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            roundButton1.ForeColor = Color.White;
+            roundButton1.Location = new Point(565, 487);
+            roundButton1.Name = "roundButton1";
+            roundButton1.Size = new Size(784, 62);
+            roundButton1.TabIndex = 2;
+            roundButton1.Text = "Play";
+            roundButton1.UseVisualStyleBackColor = false;
             // 
             // Form1
             // 
@@ -64,7 +65,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(238, 240, 242);
             ClientSize = new Size(1894, 1009);
-            Controls.Add(play_button);
+            Controls.Add(roundButton1);
             Controls.Add(pictureBox1);
             Location = new Point(815, 175);
             Name = "Form1";
@@ -76,6 +77,6 @@
         #endregion
 
         private PictureBox pictureBox1;
-        private Button play_button;
+        private RoundButton roundButton1;
     }
 }
