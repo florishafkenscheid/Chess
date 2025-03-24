@@ -65,14 +65,23 @@ namespace ChessApp
             int col = e.X / squareSize;
             int row = e.Y / squareSize;
 
-            // You can implement logic here to select and move pieces
-            // For example, highlight the clicked square or show the available moves for a piece
             MessageBox.Show($"You clicked on square ({row}, {col})");
-
-            // Update the board if needed (e.g., move a piece, etc.)
-            // For example, you could update the board array and call Invalidate() to redraw the board
-            board[row, col] = "Pawn"; // Example move (replace with actual logic)
             this.Invalidate(); // Redraw the board
+        }
+
+        private void roundButton3_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            Form1 form1 = new Form1();
+            form1.Show();
+        }
+
+        private void roundButton2_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("You resigned!");
+            this.Close();
+            Form1 form1 = new Form1();
+            form1.Show();
         }
     }
 

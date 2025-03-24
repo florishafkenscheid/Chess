@@ -76,6 +76,7 @@
             roundButton2.TabIndex = 3;
             roundButton2.Text = "Options";
             roundButton2.UseVisualStyleBackColor = false;
+            roundButton2.Click += roundButton2_Click;
             // 
             // roundButton3
             // 
