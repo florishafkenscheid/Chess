@@ -45,7 +45,7 @@
             roundButton3.TabIndex = 4;
             roundButton3.Text = "Home";
             roundButton3.UseVisualStyleBackColor = false;
-            roundButton3.Click += roundButton3_Click;
+            //roundButton3.Click += roundButton3_Click;
             // 
             // roundButton2
             // 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChessApp.Models;
 
 namespace ChessApp.pieces
 {
@@ -11,10 +12,13 @@ namespace ChessApp.pieces
         {
             public Queen(string color) : base(color) { }
 
-            public override bool IsValidMove(int startRow, int startCol, int endRow, int endCol, Piece[,] board)
+            public override bool IsValidMove(Tile startTile, Tile endTile, Board board)
             {
-                // The Queen can move like both a Rook and a Bishop: straight or diagonally
-                return startRow == endRow || startCol == endCol || Math.Abs(startRow - endRow) == Math.Abs(startCol - endCol);
+            int startRow = startTile.Row;
+            int startCol = startTile.Col;
+            int endRow = endTile.Row;
+            int endCol = endTile.Col;
+            return startRow == endRow || startCol == endCol || Math.Abs(startRow - endRow) == Math.Abs(startCol - endCol);//move like rook or bishop
             }
         }
     
