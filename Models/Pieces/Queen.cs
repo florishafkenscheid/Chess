@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChessApp.Models.Pieces
 {
-    internal class Pawn : Piece
+    internal class Queen : Piece
     {
-        public Pawn(Utils.Color color) : base(color)
+        public Queen(Utils.Color color) : base(color)
         {
         }
     }

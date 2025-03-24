@@ -8,5 +8,8 @@ namespace ChessApp.Models.Pieces
 {
     internal class Rook : Piece
     {
+        public Rook(Utils.Color color) : base(color)
+        {
+        }
     }
 }
