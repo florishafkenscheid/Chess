@@ -60,6 +60,7 @@
             roundButton1.TabIndex = 2;
             roundButton1.Text = "Play";
             roundButton1.UseVisualStyleBackColor = false;
+            roundButton1.Click += roundButton1_Click;
             // 
             // roundButton2
             // 
