@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace ChessApp.Utils
 {
-    internal enum Color
+    public enum Color
     {
-        Black,
-        White
+        Black = 0,
+        White = 1
     }
 }

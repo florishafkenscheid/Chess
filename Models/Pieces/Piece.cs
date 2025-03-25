@@ -1,14 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ChessApp.Models;
 using ChessApp.Utils;
 
-namespace ChessApp.Models.Pieces
+namespace ChessApp.pieces
 {
-    internal abstract class Piece(Utils.Color color)
+    public abstract class Piece
     {
-        public Utils.Color Color = color;
+        public Utils.Color Color { get; }
+
+        protected Piece(Utils.Color color)
+        {
+            Color = color;
+        }
+
+        // Abstract method to be implemented by specific piece types
+        public abstract bool IsValidMove(Tile startTile, Tile endTile, Board board);
+
+        public override string ToString()
+        {
+            return $"{Color} {GetType().Name}";
+        }
     }
 }

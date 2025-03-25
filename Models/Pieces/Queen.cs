@@ -3,13 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ChessApp.Models;
 
-namespace ChessApp.Models.Pieces
+namespace ChessApp.pieces
 {
-    internal class Queen : Piece
-    {
-        public Queen(Utils.Color color) : base(color)
+    
+        public class Queen : Piece
         {
+            public Queen(Utils.Color color) : base(color) { }
+
+            public override bool IsValidMove(Tile startTile, Tile endTile, Board board)
+            {
+            int startRow = startTile.Row;
+            int startCol = startTile.Col;
+            int endRow = endTile.Row;
+            int endCol = endTile.Col;
+            return startRow == endRow || startCol == endCol || Math.Abs(startRow - endRow) == Math.Abs(startCol - endCol);//move like rook or bishop
+            }
         }
-    }
+    
+
 }

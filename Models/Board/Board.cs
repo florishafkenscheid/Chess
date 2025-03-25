@@ -1,70 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ChessApp.Models.Pieces;
+﻿using ChessApp.pieces;
 
-namespace ChessApp.Models.Board
+namespace ChessApp.Models
 {
-    internal class Board
+    public class Board
     {
-        private Piece?[,] _board { get; set; }
+        private const int GridSize = 8;
+        public Tile[,] BoardState { get; private set; }
 
         public Board()
         {
-            _board = new Piece?[,] // From top left to bottom right
-            {
-                                { new Rook(Utils.Color.Black), new Knight(Utils.Color.Black), new Bishop(Utils.Color.Black), new Queen(Utils.Color.Black), new King(Utils.Color.Black), new Bishop(Utils.Color.Black), new Knight(Utils.Color.Black), new Rook(Utils.Color.Black) },
-                                { new Pawn(Utils.Color.Black), new Pawn(Utils.Color.Black), new Pawn(Utils.Color.Black), new Pawn(Utils.Color.Black), new Pawn(Utils.Color.Black), new Pawn(Utils.Color.Black), new Pawn(Utils.Color.Black), new Pawn(Utils.Color.Black) },
-                                { null, null, null, null, null, null, null, null },
-                                { null, null, null, null, null, null, null, null },
-                                { null, null, null, null, null, null, null, null },
-                                { null, null, null, null, null, null, null, null },
-                                { new Pawn(Utils.Color.White), new Pawn(Utils.Color.White), new Pawn(Utils.Color.White), new Pawn(Utils.Color.White), new Pawn(Utils.Color.White), new Pawn(Utils.Color.White), new Pawn(Utils.Color.White), new Pawn(Utils.Color.White) },
-                                { new Rook(Utils.Color.White), new Knight(Utils.Color.White), new Bishop(Utils.Color.White), new Queen(Utils.Color.White), new King(Utils.Color.White), new Bishop(Utils.Color.White), new Knight(Utils.Color.White), new Rook(Utils.Color.White) }
-            };
+            InitializeBoard(); // Init the board
         }
 
-        public Board(string fen) // rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+        private void InitializeBoard()
         {
-            _board = new Piece?[8, 8]; // Grid size
-
-            // Match letters to classes
-            Dictionary<char, Func<Utils.Color, Piece>> matchingDict = new Dictionary<char, Func<Utils.Color, Piece>>() // Thanks copilot
-                    {
-                        { 'p', color => new Pawn(color) },
-                        { 'r', color => new Rook(color) },
-                        { 'n', color => new Knight(color) },
-                        { 'b', color => new Bishop(color) },
-                        { 'q', color => new Queen(color) },
-                        { 'k', color => new King(color) },
-                        { 'P', color => new Pawn(color) },
-                        { 'R', color => new Rook(color) },
-                        { 'N', color => new Knight(color) },
-                        { 'B', color => new Bishop(color) },
-                        { 'Q', color => new Queen(color) },
-                        { 'K', color => new King(color) }
-                    };
-
-            string[] rows = fen.Split('/');
-            for (int i = 0; i < rows.Length; i++)
+            BoardState = new Tile[GridSize, GridSize];
+            for (int row = 0; row < GridSize; row++)
             {
-                int col = 0;
-                foreach (char c in rows[i])
+                for (int col = 0; col < GridSize; col++)
                 {
-                    if (char.IsDigit(c))
-                    {
-                        col += (int)char.GetNumericValue(c);
-                    }
-                    else
-                    {
-                        Utils.Color color = char.IsUpper(c) ? Utils.Color.White : Utils.Color.Black;
-                        _board[i, col] = matchingDict[char.ToLower(c)](color);
-                        col++;
-                    }
+                    BoardState[row, col] = new Tile(row, col);  
                 }
             }
+
+            // Assign pieces to the appropriate tiles
+            BoardState[0, 0].Piece = new Rook("Black");
+            BoardState[0, 1].Piece = new Knight("Black");
+            BoardState[0, 2].Piece = new Bishop("Black");
+            BoardState[0, 3].Piece = new Queen("Black");
+            BoardState[0, 4].Piece = new King("Black");
+            BoardState[0, 5].Piece = new Bishop("Black");
+            BoardState[0, 6].Piece = new Knight("Black");
+            BoardState[0, 7].Piece = new Rook("Black");
+
+            for (int i = 0; i < GridSize; i++)
+            {
+                BoardState[1, i].Piece = new Pawn("Black");
+            }
+
+            for (int i = 0; i < GridSize; i++)
+            {
+                BoardState[6, i].Piece = new Pawn("White");
+            }
+
+            BoardState[7, 0].Piece = new Rook("White");
+            BoardState[7, 1].Piece = new Knight("White");
+            BoardState[7, 2].Piece = new Bishop("White");
+            BoardState[7, 3].Piece = new Queen("White");
+            BoardState[7, 4].Piece = new King("White");
+            BoardState[7, 5].Piece = new Bishop("White");
+            BoardState[7, 6].Piece = new Knight("White");
+            BoardState[7, 7].Piece = new Rook("White");
         }
     }
 }
