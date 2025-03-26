@@ -9,7 +9,17 @@ namespace ChessApp.Models
 
         public Board()
         {
-            BoardState = InitializeBoard(); // Init the board
+            BoardState = InitializeBoard();
+
+            // Register the tile access method
+            Tile.RegisterBoardTileAccess((row, col) =>
+            {
+                if (row < 0 || row >= GridSize || col < 0 || col >= GridSize)
+                {
+                    throw new ArgumentOutOfRangeException("Row or column out of board range");
+                }
+                return BoardState[row, col];
+            });
         }
 
         private Tile[,] InitializeBoard()
@@ -19,7 +29,7 @@ namespace ChessApp.Models
             {
                 for (int col = 0; col < GridSize; col++)
                 {
-                    boardState[row, col] = new Tile(row, col);  
+                    boardState[row, col] = new Tile(row, col);
                 }
             }
 

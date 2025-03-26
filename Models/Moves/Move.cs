@@ -13,8 +13,8 @@ internal class Move
 
     public Move(string moveString)
     {
-        From = new Tile(moveString.Substring(0, 2));
-        To = new Tile(moveString.Substring(2, 2));
+        From = Tile.FromAlgebraic(moveString.Substring(0, 2));
+        To = Tile.FromAlgebraic(moveString.Substring(2, 2));
         Promotion = moveString.Length > 4 ? moveString[4] : (char?)null;
     }
 }
