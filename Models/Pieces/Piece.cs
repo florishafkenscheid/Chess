@@ -1,7 +1,7 @@
 ﻿using ChessApp.Models;
 using ChessApp.Utils;
 
-namespace ChessApp.pieces
+namespace ChessApp.Pieces
 {
     public abstract class Piece
     {

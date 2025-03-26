@@ -1,4 +1,5 @@
 ﻿using ChessApp.Models;
+using ChessApp.Pieces;
 
 namespace ChessApp.Utils
 {
@@ -20,7 +21,7 @@ namespace ChessApp.Utils
 
             while (currentRow != endTile.Row && currentCol != endTile.Col)
             {
-                if (board.BoardState[currentRow, currentCol].Piece != null)
+                if (board.BoardState[currentRow, currentCol].Piece.HasValue)
                     return false;
 
                 currentRow += rowStep;
@@ -40,7 +41,7 @@ namespace ChessApp.Utils
                 int step = startTile.Col < endTile.Col ? 1 : -1;
                 for (int col = startTile.Col + step; col != endTile.Col; col += step)
                 {
-                    if (board.BoardState[startTile.Row, col].Piece != null)
+                    if (board.BoardState[startTile.Row, col].Piece.HasValue)
                         return false;
                 }
             }
@@ -49,7 +50,7 @@ namespace ChessApp.Utils
                 int step = startTile.Row < endTile.Row ? 1 : -1;
                 for (int row = startTile.Row + step; row != endTile.Row; row += step)
                 {
-                    if (board.BoardState[row, startTile.Col].Piece != null)
+                    if (board.BoardState[row, startTile.Col].Piece.HasValue)
                         return false;
                 }
             }
