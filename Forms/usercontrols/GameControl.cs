@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using ChessApp.Models;
 using ChessApp.Models.Moves;
 using ChessApp.Pieces;
+using ChessApp.Utils;
 
 namespace ChessApp
 {
@@ -15,7 +16,7 @@ namespace ChessApp
         private Piece? selectedPiece = null;
         private Tile? selectedTile = null;
         private Utils.Color currentPlayerColor = Utils.Color.White; // Starting player is White
-        private List<Move> moveHistory = new List<Move>();
+        private LinkedList<Move> moveHistory = new();
 
         public GameControl()
         {
@@ -81,7 +82,9 @@ namespace ChessApp
                 // If a piece is selected, check if the move is valid
                 if (selectedTile != null && selectedPiece.IsValidMove(selectedTile, clickedTile, gameBoard))
                 {
-                    moveHistory.Add(new Move(selectedTile, clickedTile));
+                    moveHistory.AddLast(new Move(selectedTile, clickedTile));
+                    Serializer.Write(moveHistory);
+
                     clickedTile.Piece = selectedPiece;
                     selectedTile.Piece = null;
 
