@@ -4,23 +4,22 @@ using System.Windows.Forms;
 
 namespace ChessApp
 {
-    public partial class game : Form
+    public partial class Game : Form
     {
         private const int GridSize = 8;
         private int squareSize;
         private string[,] board;
 
-        public game()
+        public Game()
         {
             InitializeComponent();
             squareSize = 100; // Square size based on form width
             InitializeBoard();
             this.MouseClick += new MouseEventHandler(game_MouseClick);
-
         }
 
         private void InitializeBoard()
-        {
+        { // TODO!!
             // Initialize an 8x8 chessboard with pieces at starting positions
             board = new string[GridSize, GridSize]
             {

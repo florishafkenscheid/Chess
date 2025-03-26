@@ -44,7 +44,7 @@ namespace ChessApp.pieces
             }
 
             // Check if the destination is occupied by a piece of the same color
-            Piece destinationPiece = board.BoardState[endRow, endCol].Piece;
+            Piece? destinationPiece = board.BoardState[endRow, endCol].Piece;
             if (destinationPiece != null && destinationPiece.Color == this.Color)
             {
                 return false;

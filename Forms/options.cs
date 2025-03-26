@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace ChessApp
 {
-    public partial class options : Form
+    public partial class Options : Form
     {
-        public options()
+        public Options()
         {
             InitializeComponent();
         }

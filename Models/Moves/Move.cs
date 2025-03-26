@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ChessApp.Models.Board;
 
 namespace ChessApp.Models.Moves;
-
 internal class Move
 {
     public Tile From { get; }
@@ -15,8 +13,8 @@ internal class Move
 
     public Move(string moveString)
     {
-        From = moveString.Substring(0, 2);
-        To = moveString.Substring(2, 2);
+        From = new Tile(moveString.Substring(0, 2));
+        To = new Tile(moveString.Substring(2, 2));
         Promotion = moveString.Length > 4 ? moveString[4] : (char?)null;
     }
 }
