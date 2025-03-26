@@ -1,31 +1,31 @@
 ﻿using ChessApp.Models;
+using ChessApp.Utils;
 
 namespace ChessApp.pieces
 {
-    public class Rook : Piece
+    public class Rook : Piece, IStraight
     {
         public Rook(Utils.Color color) : base(color) { }
 
         public override bool IsValidMove(Tile startTile, Tile endTile, Board board)
         {
-            int startRow = startTile.Row;
-            int startCol = startTile.Col;
-            int endRow = endTile.Row;
-            int endCol = endTile.Col;
+            return IsValidStraight(startTile, endTile, board);
+        }
 
-            // Rook moves in straight lines either horizontally or vertically
-            if (startRow != endRow && startCol != endCol)
+        public bool IsValidStraight(Tile startTile, Tile endTile, Board board)
+        {
+            if (startTile.Row != endTile.Row && startTile.Col != endTile.Col)
             {
                 return false;
             }
 
             // Check if the path is clear for horizontal or vertical move
-            if (startRow == endRow) // Horizontal move
+            if (startTile.Row == endTile.Row) // Horizontal move
             {
-                int step = startCol < endCol ? 1 : -1;
-                for (int col = startCol + step; col != endCol; col += step)
+                int step = startTile.Col < endTile.Col ? 1 : -1;
+                for (int col = startTile.Col + step; col != endTile.Col; col += step)
                 {
-                    if (board.BoardState[startRow, col].Piece != null) // Check if the tile has a piece
+                    if (board.BoardState[startTile.Row, col].Piece != null) // Check if the tile has a piece
                     {
                         return false;
                     }
@@ -33,10 +33,10 @@ namespace ChessApp.pieces
             }
             else // Vertical move
             {
-                int step = startRow < endRow ? 1 : -1;
-                for (int row = startRow + step; row != endRow; row += step)
+                int step = startTile.Row < endTile.Row ? 1 : -1;
+                for (int row = startTile.Row + step; row != endTile.Row; row += step)
                 {
-                    if (board.BoardState[row, startCol].Piece != null) // Check if the tile has a piece
+                    if (board.BoardState[row, startTile.Col].Piece != null) // Check if the tile has a piece
                     {
                         return false;
                     }
@@ -44,7 +44,7 @@ namespace ChessApp.pieces
             }
 
             // Check if the destination is occupied by a piece of the same color
-            Piece? destinationPiece = board.BoardState[endRow, endCol].Piece;
+            Piece? destinationPiece = board.BoardState[endTile.Row, endTile.Col].Piece;
             if (destinationPiece != null && destinationPiece.Color == this.Color)
             {
                 return false;
