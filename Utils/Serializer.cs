@@ -14,7 +14,7 @@ namespace ChessApp.Utils
         private static readonly JsonSerializerOptions options = new() { WriteIndented = true };
         private static readonly string path = @"..\..\..\data.json"; // Same place as stockfish.exe
 
-        private record MoveHistory(List<string> Moves); // Needed for serialization to generate a better JSON outcome
+        private record MoveHistory(LinkedList<string> Moves); // Needed for serialization to generate a better JSON outcome
 
         public static void Write(LinkedList<Move> moves) // Needs second parameter for options, but as stated below that is not implemented yet
         {
@@ -25,7 +25,7 @@ namespace ChessApp.Utils
         public static string SerializeMoveHistory(LinkedList<Move> moves)
         {
             MoveHistory moveData = new(
-                Moves: moves.Select(move => move.ToString()).ToList()
+                Moves: new LinkedList<string>(moves.Select(move => move.ToString()))
             );
 
             return JsonSerializer.Serialize(moveData, options);
@@ -39,6 +39,24 @@ namespace ChessApp.Utils
         public static StreamWriter CreateFile()
         {
             return File.CreateText(path);
+        }
+
+        public static LinkedList<Move>? DeserializeMoveHistory()
+        {
+            string json;
+            using (StreamReader reader = File.OpenText(path))
+            {
+                json = reader.ReadToEnd();
+            }
+
+            MoveHistory? moveData = JsonSerializer.Deserialize<MoveHistory>(json, options);
+            if (moveData == null)
+            {
+                return null;
+            }
+
+            LinkedList<Move> moves = new(moveData.Moves.Select(moveString => new Move(moveString)));
+            return moves;
         }
     }
 }

@@ -16,7 +16,7 @@ namespace ChessApp
         private Piece? selectedPiece = null;
         private Tile? selectedTile = null;
         private Utils.Color currentPlayerColor = Utils.Color.White; // Starting player is White
-        private LinkedList<Move> moveHistory = new();
+        private LinkedList<Move>? moveHistory = new();
 
         public GameControl(string? fen = null)
         {
@@ -24,6 +24,7 @@ namespace ChessApp
             squareSize = 100; // Square size
             gameBoard = fen == null ? new Board() : new Board(fen);
             currentPlayerColor = gameBoard.ColorToMove; // If Board(fen) is called, this might be black, conflicting with the default set above
+            moveHistory = Serializer.DeserializeMoveHistory();
 
             this.MouseClick += new MouseEventHandler(game_MouseClick);
         }

@@ -1,4 +1,5 @@
-﻿using ChessApp.Pieces;
+﻿using System.Reflection;
+using ChessApp.Pieces;
 
 namespace ChessApp.Models
 {
@@ -37,7 +38,7 @@ namespace ChessApp.Models
             }
 
             int col = char.ToLower(name[0]) - 'a';
-            int row = 8 - int.Parse(name[1].ToString());
+            int row = int.Parse(name[1].ToString());
 
             return GetTileFromBoard(row, col);
         }
