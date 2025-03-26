@@ -20,8 +20,10 @@ namespace ChessApp
 
         private void roundButton1_Click(object sender, EventArgs e)
         {
-            GameControl gameControl = new GameControl();
-            gameControl.Dock = DockStyle.Fill;
+            GameControl gameControl = new()
+            {
+                Dock = DockStyle.Fill
+            };
             this.Controls.Clear();
             this.Controls.Add(gameControl);
 

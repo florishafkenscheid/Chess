@@ -6,10 +6,16 @@ namespace ChessApp.Models
     {
         private const int GRID_SIZE = 8;
         public Tile[,] BoardState { get; private set; }
+        public Utils.Color ColorToMove { get; private set; }
+        // Castling
+        // En passant
+        // Half move clock
+        // Full move number
 
         public Board()
         {
             BoardState = InitializeBoard();
+            ColorToMove = Utils.Color.White;
 
             InitializeTileAccess();
         }
@@ -79,18 +85,18 @@ namespace ChessApp.Models
         private Tile[,] InitializeBoardFromFen(string fen)
         {
             Tile[,] boardState = new Tile[GRID_SIZE, GRID_SIZE];
-            string[] fenParts = fen.Split('/');
+            string[] fenParts = fen.Split('/', ' ');
             int row = 0;
 
-            foreach (string fenPart in fenParts)
+            for (int i = 0; i < 8; i++) // 8 so it stops at fenParts[7], which is the last of the 8 rows. Information after that should be handled later
             {
                 int col = 0;
-                foreach (char symbol in fenPart)
+                foreach (char symbol in fenParts[i])
                 {
                     if (char.IsDigit(symbol))
                     {
                         int emptySpaces = int.Parse(symbol.ToString());
-                        for (int i = 0; i < emptySpaces; i++)
+                        for (int j = 0; j < emptySpaces; j++)
                         {
                             boardState[row, col] = new Tile(row, col);
                             col++;
@@ -105,6 +111,9 @@ namespace ChessApp.Models
                 }
                 row++;
             }
+
+            ColorToMove = fenParts[8] == "w" ? Utils.Color.White : Utils.Color.Black;  // Who to move
+            // See comments near attributes for TODO
 
             return boardState;
         }
