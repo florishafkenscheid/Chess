@@ -102,6 +102,5 @@ namespace ChessApp
 
             this.Invalidate();
         }
-
     }
 }
