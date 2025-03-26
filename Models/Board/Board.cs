@@ -1,4 +1,4 @@
-﻿using ChessApp.pieces;
+﻿using ChessApp.Pieces;
 
 namespace ChessApp.Models
 {

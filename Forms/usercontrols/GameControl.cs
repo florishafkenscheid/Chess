@@ -40,10 +40,10 @@ namespace ChessApp
                     Tile tile = gameBoard.BoardState[row, col];
 
                     // Draw the tile
-                    Color color = tile.Color;
+                    System.Drawing.Color color = tile.Color;
                     g.FillRectangle(new SolidBrush(color), col * squareSize, row * squareSize, squareSize, squareSize);
 
-                    if (tile.Piece.HasValue)
+                    if (tile.Piece != null)
                     {
                         Image pieceImage = Image.FromFile($"Images/{tile.Piece.ToString()}.png");
                         g.DrawImage(pieceImage, col * squareSize, row * squareSize, squareSize, squareSize);
@@ -52,7 +52,7 @@ namespace ChessApp
             }
         }
 
-        private void game_MouseClick(object sender, MouseEventArgs e)
+        private void game_MouseClick(object? sender, MouseEventArgs e)
         {
             int col = e.X / squareSize;
             int row = e.Y / squareSize;
@@ -62,10 +62,10 @@ namespace ChessApp
             // If no piece is selected, select the piece
             if (selectedPiece == null)
             {
-                if (clickedTile.Piece.HasValue)
+                if (clickedTile.Piece != null)
                 {
                     // Only select if the piece belongs to the current player
-                    if (clickedTile.Piece.Value.Color == currentPlayerColor)
+                    if (clickedTile.Piece.Color == currentPlayerColor)
                     {
                         selectedPiece = clickedTile.Piece;
                         selectedTile = clickedTile;
