@@ -4,23 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ChessApp.Models;
+using ChessApp.Utils;
 
-namespace ChessApp.pieces
+namespace ChessApp.Pieces
 {
-    
-        public class Queen : Piece
-        {
-            public Queen(Utils.Color color) : base(color) { }
+    public class Queen : Piece
+    {
+        public Queen(Utils.Color color) : base(color) { }
 
-            public override bool IsValidMove(Tile startTile, Tile endTile, Board board)
-            {
-            int startRow = startTile.Row;
-            int startCol = startTile.Col;
-            int endRow = endTile.Row;
-            int endCol = endTile.Col;
-            return startRow == endRow || startCol == endCol || Math.Abs(startRow - endRow) == Math.Abs(startCol - endCol);//move like rook or bishop
-            }
-        }
-    
-
+        public override bool IsValidMove(Tile startTile, Tile endTile, Board board) =>
+            MoveValidator.IsDiagonalValid(startTile, endTile, board, this.Color)
+            || MoveValidator.IsDiagonalValid(startTile, endTile, board, this.Color);
+    }
 }
