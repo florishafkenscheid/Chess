@@ -14,7 +14,7 @@ namespace ChessApp.pieces
 
         public override bool IsValidMove(Tile startTile, Tile endTile, Board board)
         {
-            if (IsValidStraight(startTile, endTile, board) && IsValidDiagonal(startTile, endTile, board)) 
+            if (IsValidStraight(startTile, endTile, board) || IsValidDiagonal(startTile, endTile, board)) 
             {
                 return true;
             }
