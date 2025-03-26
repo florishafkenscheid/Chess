@@ -2,7 +2,7 @@ namespace ChessApp
 {
     public partial class Form1 : Form
     {
-        private static options? optionsWindow = null;
+        private static Options? optionsWindow = null;
 
         public Form1()
         {
@@ -31,7 +31,7 @@ namespace ChessApp
         {
             if (optionsWindow == null || optionsWindow.IsDisposed)
             {
-                optionsWindow = new options();
+                optionsWindow = new Options();
                 optionsWindow.Show();
             }
             else

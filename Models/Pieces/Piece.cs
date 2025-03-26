@@ -1,13 +1,13 @@
 ﻿using ChessApp.Models;
+using ChessApp.Utils;
 
 namespace ChessApp.pieces
 {
     public abstract class Piece
     {
-        public string Color { get; }
+        public Utils.Color Color { get; }
 
-        // Constructor to initialize the piece's color
-        public Piece(string color)
+        protected Piece(Utils.Color color)
         {
             Color = color;
         }

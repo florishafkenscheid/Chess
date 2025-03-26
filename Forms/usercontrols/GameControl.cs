@@ -11,9 +11,9 @@ namespace ChessApp
         private const int GridSize = 8;
         private int squareSize;
         private Board gameBoard;
-        private Piece selectedPiece = null;
-        private Tile selectedTile = null;
-        private string currentPlayerColor = "White"; // Starting player is White
+        private Piece? selectedPiece = null;
+        private Tile? selectedTile = null;
+        private Utils.Color currentPlayerColor = Utils.Color.White; // Starting player is White
 
         public GameControl()
         {
@@ -77,7 +77,7 @@ namespace ChessApp
             else
             {
                 // If a piece is selected, check if the move is valid
-                if (selectedPiece.IsValidMove(selectedTile, clickedTile, gameBoard))
+                if (selectedTile != null && selectedPiece.IsValidMove(selectedTile, clickedTile, gameBoard))
                 {
                     clickedTile.Piece = selectedPiece;
                     selectedTile.Piece = null;
@@ -86,7 +86,7 @@ namespace ChessApp
                     selectedTile = null;
 
                     // Change turn to the other player
-                    currentPlayerColor = (currentPlayerColor == "White") ? "Black" : "White";
+                    currentPlayerColor = (currentPlayerColor == Utils.Color.White) ? Utils.Color.Black : Utils.Color.White;
 
                     MessageBox.Show($"Moved {selectedPiece} to ({row}, {col})");
 

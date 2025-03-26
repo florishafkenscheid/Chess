@@ -1,18 +1,17 @@
 ﻿using ChessApp.Models;
+using ChessApp.Utils;
 
 namespace ChessApp.pieces
 {
-    public class Pawn : Piece
+    public class Pawn(Utils.Color color) : Piece(color)
     {
-        public Pawn(string color) : base(color) { }
-
         public override bool IsValidMove(Tile startTile, Tile endTile, Board board)
         {
             int startRow = startTile.Row;
             int startCol = startTile.Col;
             int endRow = endTile.Row;
             int endCol = endTile.Col;
-            int direction = (Color == "White") ? -1 : 1; // White moves up, Black moves down
+            int direction = (Color == Utils.Color.White) ? -1 : 1; // White moves up, Black moves down
 
             // Ensure that the end tile is within bounds
             if (endRow < 0 || endRow >= 8 || endCol < 0 || endCol >= 8)
@@ -29,7 +28,7 @@ namespace ChessApp.pieces
                 }
 
                 // pawn can move forward by 2 squares if both squares are empty for the first move
-                if ((startRow == 6 && Color == "White") || (startRow == 1 && Color == "Black"))
+                if ((startRow == 6 && Color == Utils.Color.White) || (startRow == 1 && Color == Utils.Color.Black))
                 {
                     if (endRow == startRow + 2 * direction && board.BoardState[startRow + direction, startCol].Piece == null)
                     {

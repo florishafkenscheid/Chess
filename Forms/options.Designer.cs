@@ -1,6 +1,6 @@
 ﻿namespace ChessApp
 {
-    partial class options
+    partial class Options
     {
         /// <summary>
         /// Required designer variable.

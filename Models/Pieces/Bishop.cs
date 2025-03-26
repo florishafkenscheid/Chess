@@ -9,7 +9,7 @@ namespace ChessApp.pieces
 {
     public class Bishop : Piece
     {
-        public Bishop(string color) : base(color) { }
+        public Bishop(Utils.Color color) : base(color) { }
 
         public override bool IsValidMove(Tile startTile, Tile endTile, Board board)
         {

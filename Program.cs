@@ -1,3 +1,5 @@
+using ChessApp.Services;
+
 namespace ChessApp
 {
     internal static class Program

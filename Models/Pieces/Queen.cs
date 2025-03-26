@@ -7,11 +7,10 @@ using ChessApp.Models;
 
 namespace ChessApp.pieces
 {
-     
     
-        public class King : Piece
+        public class Queen : Piece
         {
-            public King(string color) : base(color) { }
+            public Queen(Utils.Color color) : base(color) { }
 
             public override bool IsValidMove(Tile startTile, Tile endTile, Board board)
             {
@@ -19,11 +18,7 @@ namespace ChessApp.pieces
             int startCol = startTile.Col;
             int endRow = endTile.Row;
             int endCol = endTile.Col;
-            // The King moves one square in any direction
-            int rowDiff = Math.Abs(startRow - endRow);
-                int colDiff = Math.Abs(startCol - endCol);
-
-                return rowDiff <= 1 && colDiff <= 1;
+            return startRow == endRow || startCol == endCol || Math.Abs(startRow - endRow) == Math.Abs(startCol - endCol);//move like rook or bishop
             }
         }
     

@@ -4,7 +4,7 @@ namespace ChessApp.pieces
 {
     public class Rook : Piece
     {
-        public Rook(string color) : base(color) { }
+        public Rook(Utils.Color color) : base(color) { }
 
         public override bool IsValidMove(Tile startTile, Tile endTile, Board board)
         {
@@ -44,7 +44,7 @@ namespace ChessApp.pieces
             }
 
             // Check if the destination is occupied by a piece of the same color
-            Piece destinationPiece = board.BoardState[endRow, endCol].Piece;
+            Piece? destinationPiece = board.BoardState[endRow, endCol].Piece;
             if (destinationPiece != null && destinationPiece.Color == this.Color)
             {
                 return false;
