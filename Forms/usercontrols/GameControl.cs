@@ -2,7 +2,8 @@
 using System.Drawing;
 using System.Windows.Forms;
 using ChessApp.Models;
-using ChessApp.pieces;
+using ChessApp.Models.Moves;
+using ChessApp.Pieces;
 
 namespace ChessApp
 {
@@ -14,6 +15,7 @@ namespace ChessApp
         private Piece? selectedPiece = null;
         private Tile? selectedTile = null;
         private Utils.Color currentPlayerColor = Utils.Color.White; // Starting player is White
+        private List<Move> moveHistory = new List<Move>();
 
         public GameControl()
         {
@@ -40,7 +42,7 @@ namespace ChessApp
                     Color color = tile.Color;
                     g.FillRectangle(new SolidBrush(color), col * squareSize, row * squareSize, squareSize, squareSize);
 
-                    if (tile.Piece != null)
+                    if (tile.Piece.HasValue)
                     {
                         Image pieceImage = Image.FromFile($"Images/{tile.Piece.ToString()}.png");
                         g.DrawImage(pieceImage, col * squareSize, row * squareSize, squareSize, squareSize);
@@ -59,10 +61,10 @@ namespace ChessApp
             // If no piece is selected, select the piece
             if (selectedPiece == null)
             {
-                if (clickedTile.Piece != null)
+                if (clickedTile.Piece.HasValue)
                 {
                     // Only select if the piece belongs to the current player
-                    if (clickedTile.Piece.Color == currentPlayerColor)
+                    if (clickedTile.Piece.Value.Color == currentPlayerColor)
                     {
                         selectedPiece = clickedTile.Piece;
                         selectedTile = clickedTile;
@@ -79,6 +81,7 @@ namespace ChessApp
                 // If a piece is selected, check if the move is valid
                 if (selectedTile != null && selectedPiece.IsValidMove(selectedTile, clickedTile, gameBoard))
                 {
+                    moveHistory.Add(new Move(selectedTile, clickedTile));
                     clickedTile.Piece = selectedPiece;
                     selectedTile.Piece = null;
 
@@ -89,7 +92,6 @@ namespace ChessApp
                     currentPlayerColor = (currentPlayerColor == Utils.Color.White) ? Utils.Color.Black : Utils.Color.White;
 
                     MessageBox.Show($"Moved {selectedPiece} to ({row}, {col})");
-
                 }
                 else
                 {

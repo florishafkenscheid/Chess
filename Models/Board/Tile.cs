@@ -41,5 +41,10 @@ namespace ChessApp.Models
 
             return GetTileFromBoard(row, col);
         }
+
+        public override string ToString()
+        {
+            return $"{(char)(Col + 'a')}{Row}";
+        }
     }
 }
