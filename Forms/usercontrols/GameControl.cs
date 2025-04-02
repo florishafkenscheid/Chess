@@ -16,7 +16,7 @@ namespace ChessApp
         private Piece? selectedPiece = null;
         private Tile? selectedTile = null;
         private Utils.Color currentPlayerColor = Utils.Color.White; // Starting player is White
-        private LinkedList<Move>? moveHistory = new();
+        private LinkedList<Move>? moveHistory;
 
         public GameControl(string? fen = null)
         {
