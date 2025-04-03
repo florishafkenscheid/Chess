@@ -2,7 +2,9 @@
 using System.Drawing;
 using System.Windows.Forms;
 using ChessApp.Models;
-using ChessApp.pieces;
+using ChessApp.Models.Moves;
+using ChessApp.Pieces;
+using ChessApp.Utils;
 
 namespace ChessApp
 {
@@ -14,12 +16,16 @@ namespace ChessApp
         private Piece? selectedPiece = null;
         private Tile? selectedTile = null;
         private Utils.Color currentPlayerColor = Utils.Color.White; // Starting player is White
+        private LinkedList<Move>? moveHistory;
 
-        public GameControl()
+        public GameControl(string? fen = null)
         {
             InitializeComponent();
             squareSize = 100; // Square size
-            gameBoard = new Board();
+            gameBoard = fen == null ? new Board() : new Board(fen);
+            currentPlayerColor = gameBoard.ColorToMove; // If Board(fen) is called, this might be black, conflicting with the default set above
+            moveHistory = Serializer.DeserializeMoveHistory();
+
             this.MouseClick += new MouseEventHandler(game_MouseClick);
         }
 
@@ -37,7 +43,7 @@ namespace ChessApp
                     Tile tile = gameBoard.BoardState[row, col];
 
                     // Draw the tile
-                    Color color = tile.Color;
+                    System.Drawing.Color color = tile.Color;
                     g.FillRectangle(new SolidBrush(color), col * squareSize, row * squareSize, squareSize, squareSize);
 
                     if (tile.Piece != null)
@@ -49,7 +55,7 @@ namespace ChessApp
             }
         }
 
-        private void game_MouseClick(object sender, MouseEventArgs e)
+        private void game_MouseClick(object? sender, MouseEventArgs e)
         {
             int col = e.X / squareSize;
             int row = e.Y / squareSize;
@@ -79,6 +85,9 @@ namespace ChessApp
                 // If a piece is selected, check if the move is valid
                 if (selectedTile != null && selectedPiece.IsValidMove(selectedTile, clickedTile, gameBoard))
                 {
+                    moveHistory.AddLast(new Move(selectedTile, clickedTile));
+                    Serializer.Write(moveHistory);
+
                     clickedTile.Piece = selectedPiece;
                     selectedTile.Piece = null;
 
@@ -89,7 +98,6 @@ namespace ChessApp
                     currentPlayerColor = (currentPlayerColor == Utils.Color.White) ? Utils.Color.Black : Utils.Color.White;
 
                     MessageBox.Show($"Moved {selectedPiece} to ({row}, {col})");
-
                 }
                 else
                 {
