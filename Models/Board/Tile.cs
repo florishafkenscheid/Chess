@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using ChessApp.Pieces;
+using ChessApp.Models.Pieces;
 
 namespace ChessApp.Models
 {
@@ -25,6 +25,12 @@ namespace ChessApp.Models
             GetTileFromBoard = tileAccessFunc;
         }
 
+        public void MovePiece(Tile to)
+        {
+            to.Piece = this.Piece;
+            this.Piece = null;
+        }
+        
         public static Tile FromAlgebraic(string name)
         {
             if (GetTileFromBoard == null)

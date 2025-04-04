@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ChessApp.Models.Moves;
-internal class Move
+public class Move
 {
     public Tile From { get; }
     public Tile To { get; }

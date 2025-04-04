@@ -1,6 +1,8 @@
-﻿using ChessApp.Pieces;
+﻿using ChessApp.Models.Moves;
+using ChessApp.Models.Pieces;
+using ChessApp.Pieces;
 
-namespace ChessApp.Models
+namespace ChessApp.Models.Board
 {
     public class Board
     {
@@ -118,7 +120,7 @@ namespace ChessApp.Models
             return boardState;
         }
 
-        private Piece PieceFromFenSymbol(char symbol)
+        private static Piece PieceFromFenSymbol(char symbol)
         {
             Utils.Color color = char.IsUpper(symbol) ? Utils.Color.White : Utils.Color.Black;
             symbol = char.ToLower(symbol);
@@ -133,6 +135,12 @@ namespace ChessApp.Models
                 'k' => new King(color),
                 _ => throw new ArgumentException("Invalid FEN symbol")
             };
+        }
+
+        public void UpdateFromMove(Move move)
+        {
+            BoardState[move.To.Row, move.To.Col] = move.To;
+            BoardState[move.From.Row, move.From.Col] = move.From;
         }
     }
 }
