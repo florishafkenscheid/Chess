@@ -48,7 +48,7 @@ namespace ChessApp
 
                     if (tile.Piece != null)
                     {
-                        Image pieceImage = Image.FromFile($"Images/{tile.Piece.ToString()}.png");
+                        Image pieceImage = Image.FromFile($"Images/{tile.Piece}.png");
                         g.DrawImage(pieceImage, col * squareSize, row * squareSize, squareSize, squareSize);
                     }
                 }
@@ -69,10 +69,9 @@ namespace ChessApp
             else
             {
                 MovePiece(selectedTile, clickedTile);
+                RedrawTiles(selectedTile, clickedTile);
                 selectedTile = null;
             }
-
-            this.Invalidate();
         }
 
         private void SelectPiece(Tile fromTile)
@@ -106,6 +105,35 @@ namespace ChessApp
             else
             {
                 MessageBox.Show("Invalid move");
+            }
+        }
+
+        private void RedrawTiles(Tile? fromTile, Tile toTile)
+        {
+            using Graphics g = this.CreateGraphics();
+            // Redraw the clicked tile
+            RedrawTile(g, toTile);
+
+            // Redraw the source tile if it exists
+            if (fromTile != null)
+            {
+                RedrawTile(g, fromTile);
+            }
+        }
+
+        private void RedrawTile(Graphics g, Tile tile)
+        {
+            int col = tile.Col;
+            int row = tile.Row;
+
+            // Draw the tile background
+            g.FillRectangle(new SolidBrush(tile.Color), col * squareSize, row * squareSize, squareSize, squareSize);
+
+            // Draw the piece if present
+            if (tile.Piece != null)
+            {
+                Image pieceImage = Image.FromFile($"Images/{tile.Piece}.png");
+                g.DrawImage(pieceImage, col * squareSize, row * squareSize, squareSize, squareSize);
             }
         }
     }
