@@ -5,6 +5,7 @@ using ChessApp.Models;
 using ChessApp.Models.Board;
 using ChessApp.Models.Moves;
 using ChessApp.Pieces;
+using ChessApp.Services;
 using ChessApp.Utils;
 
 namespace ChessApp
@@ -17,6 +18,7 @@ namespace ChessApp
         private Utils.Color currentPlayerColor = Utils.Color.White; // Starting player is White
         private readonly LinkedList<Move> moveHistory;
         private Tile? selectedTile;
+        private StockfishService? stockfishService;
 
         public GameControl(string? fen = null)
         {
@@ -25,8 +27,16 @@ namespace ChessApp
             gameBoard = fen == null ? new Board() : new Board(fen);
             currentPlayerColor = gameBoard.ColorToMove; // If Board(fen) is called, this might be black, conflicting with the default set above
             moveHistory = Serializer.DeserializeMoveHistory() ?? new LinkedList<Move>();
+            InitializeStockfishAsync();
 
-            this.MouseClick += new MouseEventHandler(Game_MouseClick);
+            MouseClick += new MouseEventHandler(Game_MouseClick);
+        }
+        private async void InitializeStockfishAsync()
+        {
+            await Task.Run(() =>
+            {
+                stockfishService = new StockfishService();
+            });
         }
 
         // Handle the drawing of the chessboard
@@ -69,7 +79,6 @@ namespace ChessApp
             else
             {
                 MovePiece(selectedTile, clickedTile);
-                RedrawTiles(selectedTile, clickedTile);
                 selectedTile = null;
             }
         }
@@ -97,10 +106,25 @@ namespace ChessApp
 
                 fromTile.MovePiece(toTile);
                 gameBoard.UpdateFromMove(recentMove);
+                RedrawTiles(fromTile, toTile);
 
                 currentPlayerColor = (currentPlayerColor == Utils.Color.White) ? Utils.Color.Black : Utils.Color.White;
 
                 MessageBox.Show($"Moved {fromTile.Piece} to ({toTile.Row}, {toTile.Col})");
+
+                // If it's now the AI's turn, make the AI move
+                if (currentPlayerColor == Utils.Color.Black) // Assuming AI plays as Black
+                {
+                    // Use Task.Run to avoid UI freezing while waiting for Stockfish
+                    Task.Run(() =>
+                    {
+                        // Need to use Invoke since we're updating UI from a different thread
+                        Invoke((MethodInvoker) async delegate
+                        {
+                            await MakeStockfishMove();
+                        });
+                    });
+                }
             }
             else
             {
@@ -135,6 +159,23 @@ namespace ChessApp
                 Image pieceImage = Image.FromFile($"Images/{tile.Piece}.png");
                 g.DrawImage(pieceImage, col * squareSize, row * squareSize, squareSize, squareSize);
             }
+        }
+
+        private async Task MakeStockfishMove()
+        {
+            if (stockfishService == null)
+            {
+                MessageBox.Show("Stockfish engine is not yet initialized. Please try again in a moment.");
+                return;
+            }
+
+            string currentFen = gameBoard.ToString(); // TODO
+            await stockfishService.SetPosition(currentFen);
+
+            Move bestMove = await stockfishService.GetBestMove();
+
+            MovePiece(bestMove.From, bestMove.To);
+
         }
     }
 }
