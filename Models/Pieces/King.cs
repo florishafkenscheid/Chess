@@ -11,7 +11,7 @@ namespace ChessApp.Pieces
 {
     public class King : Piece
     {
-        public King(Utils.Color color) : base(color) { }
+        public King(Utils.Color color) : base(color, 'k') { }
 
         public override bool IsValidMove(Tile startTile, Tile endTile, Board board)
         {

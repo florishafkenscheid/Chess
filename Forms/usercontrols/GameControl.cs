@@ -40,26 +40,38 @@ namespace ChessApp
         }
 
         // Handle the drawing of the chessboard
+        // In GameControl.cs
         protected override void OnPaint(PaintEventArgs e)
         {
             base.OnPaint(e);
             Graphics g = e.Graphics;
 
-            // Loop through each tile on the board
             for (int row = 0; row < GridSize; row++)
             {
                 for (int col = 0; col < GridSize; col++)
                 {
                     Tile tile = gameBoard.BoardState[row, col];
 
-                    // Draw the tile
-                    System.Drawing.Color color = tile.Color;
-                    g.FillRectangle(new SolidBrush(color), col * squareSize, row * squareSize, squareSize, squareSize);
+                    // Draw tile background
+                    System.Drawing.Color bgColor = tile.Color == System.Drawing.Color.White ?
+                        System.Drawing.Color.White : System.Drawing.Color.Gray;
+                    g.FillRectangle(new SolidBrush(bgColor), col * squareSize, row * squareSize, squareSize, squareSize);
 
+                    // Draw piece image if present
                     if (tile.Piece != null)
                     {
                         Image pieceImage = Image.FromFile($"Images/{tile.Piece}.png");
                         g.DrawImage(pieceImage, col * squareSize, row * squareSize, squareSize, squareSize);
+                    }
+
+                    // Draw tile name (e.g., "a1")
+                    string tileName = tile.ToString();
+                    System.Drawing.Color textColor = tile.Color == System.Drawing.Color.White ?
+                        System.Drawing.Color.Black : System.Drawing.Color.White;
+                    using (Font font = new Font("Arial", 8))
+                    {
+                        g.DrawString(tileName, font, new SolidBrush(textColor),
+                            col * squareSize + 2, row * squareSize + 2);
                     }
                 }
             }
@@ -105,7 +117,7 @@ namespace ChessApp
                 Serializer.Write(moveHistory);
 
                 fromTile.MovePiece(toTile);
-                gameBoard.UpdateFromMove(recentMove);
+                gameBoard.UpdateFromMove(recentMove, currentPlayerColor);
                 RedrawTiles(fromTile, toTile);
 
                 currentPlayerColor = (currentPlayerColor == Utils.Color.White) ? Utils.Color.Black : Utils.Color.White;
@@ -169,13 +181,12 @@ namespace ChessApp
                 return;
             }
 
-            string currentFen = gameBoard.ToString(); // TODO
+            string currentFen = gameBoard.ToString();
             await stockfishService.SetPosition(currentFen);
 
             Move bestMove = await stockfishService.GetBestMove();
 
             MovePiece(bestMove.From, bestMove.To);
-
         }
     }
 }

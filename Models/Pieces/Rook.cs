@@ -7,7 +7,7 @@ namespace ChessApp.Pieces
 {
     public class Rook : Piece
     {
-        public Rook(Utils.Color color) : base(color) { }
+        public Rook(Utils.Color color) : base(color, 'r') { }
 
         public override bool IsValidMove(Tile startTile, Tile endTile, Board board) => MoveValidator.IsStraightValid(startTile, endTile, board, this.Color);
     }
