@@ -12,6 +12,6 @@ namespace ChessApp.Pieces
 {
     public class Bishop(Utils.Color color) : Piece(color, 'b')
     {
-        public override bool IsValidMove(Tile startTile, Tile endTile, Board board) => MoveValidator.IsStraightValid(startTile, endTile, board, this.Color);
+        public override bool IsValidMove(Tile startTile, Tile endTile, Board board) => MoveValidator.IsDiagonalValid(startTile, endTile, board, this.Color);
     }
 }

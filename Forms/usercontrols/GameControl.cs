@@ -63,16 +63,6 @@ namespace ChessApp
                         Image pieceImage = Image.FromFile($"Images/{tile.Piece}.png");
                         g.DrawImage(pieceImage, col * squareSize, row * squareSize, squareSize, squareSize);
                     }
-
-                    // Draw tile name (e.g., "a1")
-                    string tileName = tile.ToString();
-                    System.Drawing.Color textColor = tile.Color == System.Drawing.Color.White ?
-                        System.Drawing.Color.Black : System.Drawing.Color.White;
-                    using (Font font = new Font("Arial", 8))
-                    {
-                        g.DrawString(tileName, font, new SolidBrush(textColor),
-                            col * squareSize + 2, row * squareSize + 2);
-                    }
                 }
             }
         }
