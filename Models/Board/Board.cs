@@ -1,6 +1,6 @@
-﻿using ChessApp.Pieces;
+﻿using ChessApp.Models.Pieces;
 
-namespace ChessApp.Models
+namespace ChessApp.Models.Board
 {
     public class Board
     {

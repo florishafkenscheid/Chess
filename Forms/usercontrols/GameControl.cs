@@ -2,8 +2,9 @@
 using System.Drawing;
 using System.Windows.Forms;
 using ChessApp.Models;
+using ChessApp.Models.Board;
 using ChessApp.Models.Moves;
-using ChessApp.Pieces;
+using ChessApp.Models.Pieces;
 using ChessApp.Utils;
 
 namespace ChessApp
@@ -24,7 +25,7 @@ namespace ChessApp
             squareSize = 100; // Square size
             gameBoard = fen == null ? new Board() : new Board(fen);
             currentPlayerColor = gameBoard.ColorToMove; // If Board(fen) is called, this might be black, conflicting with the default set above
-            moveHistory = Serializer.DeserializeMoveHistory();
+            moveHistory = Serializer.DeserializeMoveHistory() ?? new LinkedList<Move>();
 
             this.MouseClick += new MouseEventHandler(game_MouseClick);
         }

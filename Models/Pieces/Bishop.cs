@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ChessApp.Models;
 using ChessApp.Utils;
 
-namespace ChessApp.Pieces
+namespace ChessApp.Models.Pieces
 {
-    public class Bishop : Piece
+    public class Bishop(Utils.Color color) : Piece(color)
     {
-        public Bishop(Utils.Color color) : base(color) { }
-
-        public override bool IsValidMove(Tile startTile, Tile endTile, Board board) => MoveValidator.IsStraightValid(startTile, endTile, board, this.Color);
+        public override bool IsValidMove(Tile startTile, Tile endTile, Board.Board board) => MoveValidator.IsStraightValid(startTile, endTile, board, Color);
     }
 }
