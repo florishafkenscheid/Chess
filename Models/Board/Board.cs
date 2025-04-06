@@ -1,6 +1,10 @@
-﻿using ChessApp.Pieces;
+﻿using System.Text;
+using ChessApp.Models.Moves;
+using ChessApp.Models.Pieces;
+using ChessApp.Pieces;
+using ChessApp.Utils;
 
-namespace ChessApp.Models
+namespace ChessApp.Models.Board
 {
     public class Board
     {
@@ -118,7 +122,7 @@ namespace ChessApp.Models
             return boardState;
         }
 
-        private Piece PieceFromFenSymbol(char symbol)
+        private static Piece PieceFromFenSymbol(char symbol)
         {
             Utils.Color color = char.IsUpper(symbol) ? Utils.Color.White : Utils.Color.Black;
             symbol = char.ToLower(symbol);
@@ -133,6 +137,76 @@ namespace ChessApp.Models
                 'k' => new King(color),
                 _ => throw new ArgumentException("Invalid FEN symbol")
             };
+        }
+
+        public void UpdateFromMove(Move move, Utils.Color currentPlayerColor)
+        {
+            BoardState[move.To.Row, move.To.Col] = move.To;
+            BoardState[move.From.Row, move.From.Col] = move.From;
+            ColorToMove = ColorToMove == Utils.Color.White ? Utils.Color.Black : Utils.Color.White; // Toggle ColorToMove
+        }
+
+        public override string ToString() // thanks claude
+        {
+            StringBuilder fen = new();
+
+            // 1. Piece placement (board representation)
+            for (int row = 0; row < GRID_SIZE; row++)
+            {
+                int emptyCount = 0;
+
+                for (int col = 0; col < GRID_SIZE; col++)
+                {
+                    Tile tile = BoardState[row, col];
+
+                    if (tile.Piece == null)
+                    {
+                        emptyCount++;
+                    }
+                    else
+                    {
+                        // If there were empty squares before this piece, add the count
+                        if (emptyCount > 0)
+                        {
+                            fen.Append(emptyCount);
+                            emptyCount = 0;
+                        }
+
+                        // Add the piece representation
+                        fen.Append(tile.Piece.ToFen());
+                    }
+                }
+
+                // If there are empty squares at the end of the row
+                if (emptyCount > 0)
+                {
+                    fen.Append(emptyCount);
+                }
+
+                // Add row separator (except after the last row)
+                if (row < GRID_SIZE - 1)
+                {
+                    fen.Append('/');
+                }
+            }
+
+            // 2. Active color
+            fen.Append(' ');
+            fen.Append(ColorToMove == Utils.Color.White ? 'w' : 'b');
+
+            // 3. Castling rights (placeholder for now)
+            fen.Append(" KQkq");
+
+            // 4. En passant target square (placeholder for now)
+            fen.Append(" -");
+
+            // 5. Halfmove clock (placeholder for now)
+            fen.Append(" 0");
+
+            // 6. Fullmove number (placeholder for now)
+            fen.Append(" 1");
+
+            return fen.ToString();
         }
     }
 }

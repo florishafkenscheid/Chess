@@ -1,9 +1,11 @@
 ﻿using ChessApp.Models;
+using ChessApp.Models.Board;
+using ChessApp.Models.Pieces;
 using ChessApp.Utils;
 
 namespace ChessApp.Pieces
 {
-    public class Pawn(Utils.Color color) : Piece(color)
+    public class Pawn(Utils.Color color) : Piece(color, 'p')
     {
         public override bool IsValidMove(Tile startTile, Tile endTile, Board board)
         {

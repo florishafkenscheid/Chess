@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using ChessApp.Pieces;
+using ChessApp.Models.Pieces;
 
 namespace ChessApp.Models
 {
@@ -25,6 +25,12 @@ namespace ChessApp.Models
             GetTileFromBoard = tileAccessFunc;
         }
 
+        public void MovePiece(Tile to)
+        {
+            to.Piece = this.Piece;
+            this.Piece = null;
+        }
+
         public static Tile FromAlgebraic(string name)
         {
             if (GetTileFromBoard == null)
@@ -37,15 +43,17 @@ namespace ChessApp.Models
                 throw new ArgumentException("Name of tile too long, should be e.g. 'e2'");
             }
 
-            int col = char.ToLower(name[0]) - 'a';
-            int row = int.Parse(name[1].ToString());
+            int parsedCol = char.ToLower(name[0]) - 'a';
+            int parsedRank = 8 - int.Parse(name[1].ToString()); // -8 = Convert rank to code's row index
 
-            return GetTileFromBoard(row, col);
+            return GetTileFromBoard(parsedRank, parsedCol);
         }
 
+        // In Tile.cs
         public override string ToString()
         {
-            return $"{(char)(Col + 'a')}{Row}";
+            int rank = 8 - Row; // Convert 0-based row to chess rank (e.g., Row 0 -> "8")
+            return $"{(char)(Col + 'a')}{rank}";
         }
     }
 }

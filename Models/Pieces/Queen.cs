@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ChessApp.Models;
+using ChessApp.Models.Board;
+using ChessApp.Models.Pieces;
 using ChessApp.Utils;
 
 namespace ChessApp.Pieces
 {
     public class Queen : Piece
     {
-        public Queen(Utils.Color color) : base(color) { }
+        public Queen(Utils.Color color) : base(color, 'q') { }
 
         public override bool IsValidMove(Tile startTile, Tile endTile, Board board) =>
             MoveValidator.IsDiagonalValid(startTile, endTile, board, this.Color)
