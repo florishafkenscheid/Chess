@@ -64,5 +64,8 @@ namespace ChessApp.Utils
             Piece? destinationPiece = board.BoardState[endTile.Row, endTile.Col].Piece;
             return destinationPiece == null || destinationPiece.Color != color;
         }
+
+       
+
     }
 }
