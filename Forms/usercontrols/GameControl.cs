@@ -20,6 +20,7 @@ namespace ChessApp
         private readonly List<Tile> highlightedTiles = [];
         private Tile? selectedTile;
         private StockfishService? stockfishService;
+        private bool isResigned = false;
 
         public GameControl()
         {
@@ -29,6 +30,12 @@ namespace ChessApp
             if (moveHistory.Count > 0)
             {
                 gameBoard = new Board(moveHistory); // Overwrite the board if there's a move history
+                whiteLastMove.Text = moveHistory.Last.Value.ToString();
+                if (moveHistory.Count > 1)
+                {
+                    var secondToLastMove = moveHistory.Last.Previous.Value;
+                    BlackLastMove.Text = secondToLastMove.ToString();
+                }
             }
             currentPlayerColor = gameBoard.ColorToMove; // If Board(fen) is called, this might be black, conflicting with the default set above
 
@@ -75,6 +82,11 @@ namespace ChessApp
 
         private void Game_MouseClick(object? sender, MouseEventArgs e)
         {
+            if (e.X > squareSize * GridSize || e.Y > squareSize * GridSize)
+            {
+                return; // Click is outside the grid, do nothing
+            }
+
             int col = e.X / squareSize;
             int row = e.Y / squareSize;
 
@@ -93,17 +105,24 @@ namespace ChessApp
 
         private void SelectPiece(Tile fromTile)
         {
-            if (fromTile.Piece != null && fromTile.Piece.Color == currentPlayerColor)
+            if (!isResigned)
             {
-                selectedTile = fromTile;
-                //MessageBox.Show($"Selected {fromTile.Piece} at ({fromTile.Row}, {fromTile.Col})");
-                // Highlight the selected tile
-                HighlightValidMovesForSelectedTile(fromTile);
+                if (fromTile.Piece != null && fromTile.Piece.Color == currentPlayerColor)
+                {
+                    selectedTile = fromTile;
+                    //MessageBox.Show($"Selected {fromTile.Piece} at ({fromTile.Row}, {fromTile.Col})");
+                    // Highlight the selected tile
+                    HighlightValidMovesForSelectedTile(fromTile);
 
+                }
+                else
+                {
+                    MessageBox.Show("You cannot select an opponent's piece or an empty tile.");
+                }
             }
             else
             {
-                MessageBox.Show("You cannot select an opponent's piece or an empty tile.");
+                MessageBox.Show("You have resigned, you cannot select a piece.");
             }
         }
 
@@ -237,6 +256,7 @@ namespace ChessApp
             {
                 // Get the winning color (opposite of current player)
                 Utils.Color winningColor = currentPlayerColor == Utils.Color.White ? Utils.Color.Black : Utils.Color.White;
+                label4.Text = $"{currentPlayerColor} is in checkmate";
                 MessageBox.Show($"Checkmate! {winningColor} wins the game.");
                 Serializer.ClearMoves();
             }
@@ -244,12 +264,33 @@ namespace ChessApp
             {
                 MessageBox.Show($"{currentPlayerColor} is in check!");
             }
+
+            if (!gameBoard.IsCheckmate(currentPlayerColor) && !gameBoard.IsInCheck(currentPlayerColor))
+            {
+                label4.Text = "currently playing";
+            }
+            else if (gameBoard.IsInCheck(currentPlayerColor))
+            {
+                label4.Text = $"{currentPlayerColor} is in check";
+            }
         }
 
         private void roundButton2_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("u have resigned.");
-            Serializer.ClearMoves();
+            if (isResigned == false)
+            {
+                MessageBox.Show("You have resigned");
+                isResigned = true;
+                // Clear the move history
+                Serializer.ClearMoves();
+            }
+            else
+            {
+                Form1 form1 = new Form1();
+                form1.FormClosed += (s, args) => Application.Exit();
+                this.FindForm()?.Hide();
+                form1.Show();
+            }
         }
 
         private void roundButton3_Click(object sender, EventArgs e)
@@ -259,5 +300,11 @@ namespace ChessApp
             this.FindForm()?.Hide();
             form1.Show();
         }
+        private void displayGameState()
+        {
+
+        }
+
+        
     }
 }

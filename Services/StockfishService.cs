@@ -35,6 +35,10 @@ namespace ChessApp.Services
         {
             return new Move(await _engine.GetBestMove(timeMs));
         }
+        public async Task<bool> IsReady()
+        {
+            return await _engine.IsReady();
+        }
 
         public async Task SetPosition(string fen)
         {
