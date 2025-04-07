@@ -7,29 +7,25 @@ namespace ChessApp
         public Form1()
         {
             InitializeComponent();
-
-
-
         }
 
-        private void roundButton3_Click(object sender, EventArgs e)
+        private void RoundButton3_Click(object sender, EventArgs e)
         {
             this.Close();
-
         }
 
-        private void roundButton1_Click(object sender, EventArgs e)
+        private void RoundButton1_Click(object sender, EventArgs e)
         {
             GameControl gameControl = new()
             {
                 Dock = DockStyle.Fill
             };
+
             this.Controls.Clear();
             this.Controls.Add(gameControl);
-
         }
 
-        private void OpenOptionsWindow()
+        private static void OpenOptionsWindow()
         {
             if (optionsWindow == null || optionsWindow.IsDisposed)
             {
@@ -41,10 +37,9 @@ namespace ChessApp
                 optionsWindow.BringToFront(); // If the window is already open, bring it to the front
             }
         }
-        private void roundButton2_Click(object sender, EventArgs e)
+        private void RoundButton2_Click(object sender, EventArgs e)
         {
             OpenOptionsWindow();
         }
-
     }
 }

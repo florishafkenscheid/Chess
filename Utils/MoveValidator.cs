@@ -1,5 +1,4 @@
-﻿using ChessApp.Models;
-using ChessApp.Models.Board;
+﻿using ChessApp.Models.Board;
 using ChessApp.Models.Pieces;
 
 namespace ChessApp.Utils

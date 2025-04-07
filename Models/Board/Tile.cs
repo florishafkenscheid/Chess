@@ -1,7 +1,6 @@
-﻿using System.Reflection;
-using ChessApp.Models.Pieces;
+﻿using ChessApp.Models.Pieces;
 
-namespace ChessApp.Models
+namespace ChessApp.Models.Board
 {
     public class Tile
     {
@@ -32,8 +31,8 @@ namespace ChessApp.Models
                 throw new InvalidOperationException("Cannot move from an empty tile");
             }
 
-            to.Piece = this.Piece;
-            this.Piece = null;
+            to.Piece = Piece;
+            Piece = null;
         }
 
         public static Tile FromAlgebraic(string name)

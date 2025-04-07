@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ChessApp.Utils;
-using ChessApp.Models;
 using ChessApp.Models.Board;
 using ChessApp.Models.Pieces;
 
