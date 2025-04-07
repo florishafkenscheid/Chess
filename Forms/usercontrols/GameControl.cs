@@ -18,14 +18,32 @@ public partial class GameControl : UserControl
 
     public GameControl()
     {
-        InitializeComponent();
-        gameBoard = new Board(); // Initialize an empty board first
-        moveHistory = Serializer.DeserializeMoveHistory() ?? new LinkedList<Move>();
-        if (moveHistory.Count > 0)
+        private const int GridSize = 8;
+        private readonly int squareSize = 100;
+        private readonly Board gameBoard;
+        private Utils.Color currentPlayerColor = Utils.Color.White; // Starting player is White
+        private readonly LinkedList<Move> moveHistory;
+        private readonly List<Tile> highlightedTiles = [];
+        private Tile? selectedTile;
+        private StockfishService? stockfishService;
+        private bool isResigned = false;
+
+        public GameControl()
         {
-            gameBoard = new Board(moveHistory); // Overwrite the board if there's a move history
-        }
-        currentPlayerColor = gameBoard.ColorToMove; // If Board(fen) is called, this might be black, conflicting with the default set above
+            InitializeComponent();
+            gameBoard = new Board(); // Initialize an empty board first
+            moveHistory = Serializer.DeserializeMoveHistory() ?? new LinkedList<Move>();
+            if (moveHistory.Count > 0)
+            {
+                gameBoard = new Board(moveHistory); // Overwrite the board if there's a move history
+                whiteLastMove.Text = moveHistory.Last.Value.ToString();
+                if (moveHistory.Count > 1)
+                {
+                    var secondToLastMove = moveHistory.Last.Previous.Value;
+                    BlackLastMove.Text = secondToLastMove.ToString();
+                }
+            }
+            currentPlayerColor = gameBoard.ColorToMove; // If Board(fen) is called, this might be black, conflicting with the default set above
 
         InitializeStockfishAsync();
 
@@ -34,11 +52,9 @@ public partial class GameControl : UserControl
     private async void InitializeStockfishAsync()
     {
         await Task.Run(() =>
-        {
             stockfishService = new StockfishService();
         });
     }
-        
 
     // Handle the drawing of the chessboard
     // In GameControl.cs
@@ -70,6 +86,11 @@ public partial class GameControl : UserControl
 
     private void Game_MouseClick(object? sender, MouseEventArgs e)
     {
+        if (e.X > squareSize * GridSize || e.Y > squareSize * GridSize)
+        {
+            return; // Click is outside the grid, do nothing
+        }
+
         int col = e.X / squareSize;
         int row = e.Y / squareSize;
 
@@ -90,11 +111,25 @@ public partial class GameControl : UserControl
     {
         if (fromTile.Piece != null && fromTile.Piece.Color == currentPlayerColor)
         {
-            selectedTile = fromTile;
-            //MessageBox.Show($"Selected {fromTile.Piece} at ({fromTile.Row}, {fromTile.Col})");
-            // Highlight the selected tile
-            HighlightValidMovesForSelectedTile(fromTile);
+            if (!isResigned)
+            {
+                if (fromTile.Piece != null && fromTile.Piece.Color == currentPlayerColor)
+                {
+                    selectedTile = fromTile;
+                    //MessageBox.Show($"Selected {fromTile.Piece} at ({fromTile.Row}, {fromTile.Col})");
+                    // Highlight the selected tile
+                    HighlightValidMovesForSelectedTile(fromTile);
 
+                }
+                else
+                {
+                    MessageBox.Show("You cannot select an opponent's piece or an empty tile.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("You have resigned, you cannot select a piece.");
+            }
         }
         else
         {
@@ -235,12 +270,52 @@ public partial class GameControl : UserControl
         {
             // Get the winning color (opposite of current player)
             Utils.Color winningColor = currentPlayerColor == Utils.Color.White ? Utils.Color.Black : Utils.Color.White;
+            label4.Text = $"{currentPlayerColor} is in checkmate";
             MessageBox.Show($"Checkmate! {winningColor} wins the game.");
             Serializer.ClearMoves();
         }
         else if (isInCheck)
         {
             MessageBox.Show($"{currentPlayerColor} is in check!");
+        }
+
+        if (!gameBoard.IsCheckmate(currentPlayerColor) && !gameBoard.IsInCheck(currentPlayerColor))
+        {
+            label4.Text = "currently playing";
+        }
+        else if (gameBoard.IsInCheck(currentPlayerColor))
+        {
+            label4.Text = $"{currentPlayerColor} is in check";
+        }
+
+        private void roundButton2_Click(object sender, EventArgs e)
+        {
+            if (isResigned == false)
+            {
+                MessageBox.Show("You have resigned");
+                isResigned = true;
+                // Clear the move history
+                Serializer.ClearMoves();
+            }
+            else
+            {
+                Form1 form1 = new Form1();
+                form1.FormClosed += (s, args) => Application.Exit();
+                this.FindForm()?.Hide();
+                form1.Show();
+            }
+        }
+
+        private void roundButton3_Click(object sender, EventArgs e)
+        {
+            Form1 form1 = new Form1();
+            form1.FormClosed += (s, args) => Application.Exit();
+            this.FindForm()?.Hide();
+            form1.Show();
+        }
+        private void displayGameState()
+        {
+
         }
     }
 }

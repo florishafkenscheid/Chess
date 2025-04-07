@@ -36,6 +36,8 @@ namespace ChessApp
             BlackLastMove = new TextBox();
             label1 = new Label();
             label2 = new Label();
+            label3 = new Label();
+            label4 = new Label();
             SuspendLayout();
             // 
             // roundButton3
@@ -51,6 +53,7 @@ namespace ChessApp
             roundButton3.TabIndex = 4;
             roundButton3.Text = "Home";
             roundButton3.UseVisualStyleBackColor = false;
+            roundButton3.Click += roundButton3_Click;
             // 
             // roundButton2
             // 
@@ -65,11 +68,13 @@ namespace ChessApp
             roundButton2.TabIndex = 3;
             roundButton2.Text = "Resign";
             roundButton2.UseVisualStyleBackColor = false;
+            roundButton2.Click += roundButton2_Click;
             // 
             // whiteLastMove
             // 
             whiteLastMove.Location = new Point(999, 130);
             whiteLastMove.Name = "whiteLastMove";
+            whiteLastMove.ReadOnly = true;
             whiteLastMove.Size = new Size(200, 39);
             whiteLastMove.TabIndex = 5;
             // 
@@ -77,6 +82,7 @@ namespace ChessApp
             // 
             BlackLastMove.Location = new Point(1620, 130);
             BlackLastMove.Name = "BlackLastMove";
+            BlackLastMove.ReadOnly = true;
             BlackLastMove.Size = new Size(200, 39);
             BlackLastMove.TabIndex = 6;
             // 
@@ -98,10 +104,31 @@ namespace ChessApp
             label2.TabIndex = 7;
             label2.Text = "Black last move";
             // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 80F);
+            label3.Location = new Point(1353, 433);
+            label3.Name = "label3";
+            label3.Size = new Size(0, 283);
+            label3.TabIndex = 8;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 25F);
+            label4.Location = new Point(999, 411);
+            label4.Name = "label4";
+            label4.Size = new Size(65, 89);
+            label4.TabIndex = 9;
+            label4.Text = "-";
+            // 
             // GameControl
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(label4);
+            Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(BlackLastMove);
@@ -122,5 +149,7 @@ namespace ChessApp
         private TextBox BlackLastMove;
         private Label label1;
         private Label label2;
+        private Label label3;
+        private Label label4;
     }
 }
