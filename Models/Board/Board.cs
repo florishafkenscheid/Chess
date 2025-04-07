@@ -8,7 +8,7 @@ namespace ChessApp.Models.Board
 {
     public class Board
     {
-        private const int GRID_SIZE = 8;
+        public const int GRID_SIZE = 8;
         public Tile[,] BoardState { get; private set; }
         public Utils.Color ColorToMove { get; private set; }
         // Castling

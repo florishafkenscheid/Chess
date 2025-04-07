@@ -65,7 +65,7 @@ namespace ChessApp.Utils
             return destinationPiece == null || destinationPiece.Color != color;
         }
 
-       
+
 
     }
 }

@@ -21,6 +21,7 @@ namespace ChessApp.Pieces
                 return false;
             }
 
+
             // pawn moves forward by 1 square if the destination is empty
             if (startCol == endCol && endTile.Piece == null)
             {
@@ -48,8 +49,9 @@ namespace ChessApp.Pieces
                     return true;
                 }
             }
+            return false;
 
-            return false; 
         }
+        
     }
 }

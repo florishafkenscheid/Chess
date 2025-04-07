@@ -39,6 +39,7 @@ namespace ChessApp
                 stockfishService = new StockfishService();
             });
         }
+        
 
         // Handle the drawing of the chessboard
         // In GameControl.cs
@@ -91,8 +92,7 @@ namespace ChessApp
             if (fromTile.Piece != null && fromTile.Piece.Color == currentPlayerColor)
             {
                 selectedTile = fromTile;
-                MessageBox.Show($"Selected {fromTile.Piece} at ({fromTile.Row}, {fromTile.Col})");
-
+                //MessageBox.Show($"Selected {fromTile.Piece} at ({fromTile.Row}, {fromTile.Col})");
                 // Highlight the selected tile
                 HighlightValidMovesForSelectedTile(fromTile);
 
@@ -116,8 +116,15 @@ namespace ChessApp
                 RedrawTiles(fromTile, toTile);
 
                 currentPlayerColor = (currentPlayerColor == Utils.Color.White) ? Utils.Color.Black : Utils.Color.White;
-
-                MessageBox.Show($"Moved {fromTile.Piece} to ({toTile.Row}, {toTile.Col})");
+                //MessageBox.Show($"Moved {fromTile.Piece} to ({toTile.Row}, {toTile.Col})");
+                if (currentPlayerColor != Utils.Color.White)
+                {
+                    whiteLastMove.Text = moveHistory.Last.Value.ToString();
+                }
+                else
+                {
+                    BlackLastMove.Text = moveHistory.Last.Value.ToString();
+                }
 
                 // If it's now the AI's turn, make the AI move
                 if (currentPlayerColor == Utils.Color.Black) // Assuming AI plays as Black
@@ -214,5 +221,7 @@ namespace ChessApp
 
             MovePiece(bestMove.From, bestMove.To);
         }
+
+        
     }
 }
