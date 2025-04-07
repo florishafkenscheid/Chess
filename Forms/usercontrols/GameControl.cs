@@ -5,6 +5,7 @@ using ChessApp.Models;
 using ChessApp.Models.Board;
 using ChessApp.Models.Moves;
 using ChessApp.Models.Pieces;
+using ChessApp.Services;
 using ChessApp.Utils;
 
 namespace ChessApp
