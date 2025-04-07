@@ -85,18 +85,17 @@ namespace ChessApp.Models.Board
         private void InitializeBoardFromMoveHistory(LinkedList<Move> moveHistory)
         {
             InitializeBoard();
-            Utils.Color colorToMove = Utils.Color.White;
+
             foreach (Move move in moveHistory)
             {
-                UpdateFromMove(move, colorToMove);
-                colorToMove = colorToMove == Utils.Color.White ? Utils.Color.Black : Utils.Color.White;
+                UpdateFromMove(move);
             }
         }
 
-        public void UpdateFromMove(Move move, Utils.Color currentPlayerColor)
+        public void UpdateFromMove(Move move)
         {
             BoardState[move.To.Row, move.To.Col].Piece = move.From.Piece;
-            BoardState[move.From.Row, move.From.Col] = new Tile(move.From.Row, move.From.Col);
+            BoardState[move.From.Row, move.From.Col].Piece = null;
             ColorToMove = ColorToMove == Utils.Color.White ? Utils.Color.Black : Utils.Color.White; // Toggle ColorToMove
         }
 
@@ -161,6 +160,111 @@ namespace ChessApp.Models.Board
             fen.Append(" 1");
 
             return fen.ToString();
+        }
+
+        // Tijdsnood dus veel AI.
+        public Tile FindKing(Utils.Color color)
+        {
+            for (int row = 0; row < GRID_SIZE; row++)
+            {
+                for (int col = 0; col < GRID_SIZE; col++)
+                {
+                    Piece? piece = BoardState[row, col].Piece;
+                    if (piece is King && piece.Color == color)
+                    {
+                        return BoardState[row, col];
+                    }
+                }
+            }
+            throw new InvalidOperationException($"No {color} King found on the board");
+        }
+
+        public bool IsInCheck(Utils.Color color)
+        {
+            Tile kingTile = FindKing(color);
+            Utils.Color opponentColor = color == Utils.Color.White ? Utils.Color.Black : Utils.Color.White;
+
+            // Check if any opponent piece can capture the king
+            for (int row = 0; row < GRID_SIZE; row++)
+            {
+                for (int col = 0; col < GRID_SIZE; col++)
+                {
+                    Piece? piece = BoardState[row, col].Piece;
+                    if (piece != null && piece.Color == opponentColor)
+                    {
+                        if (piece.IsValidMove(BoardState[row, col], kingTile, this))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public bool IsCheckmate(Utils.Color color)
+        {
+            // If not in check, can't be checkmate
+            if (!IsInCheck(color))
+            {
+                return false;
+            }
+
+            // Try all possible moves for all pieces of the current player's color
+            for (int fromRow = 0; fromRow < GRID_SIZE; fromRow++)
+            {
+                for (int fromCol = 0; fromCol < GRID_SIZE; fromCol++)
+                {
+                    Piece? piece = BoardState[fromRow, fromCol].Piece;
+                    if (piece != null && piece.Color == color)
+                    {
+                        // Try moving this piece to every possible square
+                        for (int toRow = 0; toRow < GRID_SIZE; toRow++)
+                        {
+                            for (int toCol = 0; toCol < GRID_SIZE; toCol++)
+                            {
+                                // Skip invalid moves
+                                if (!piece.IsValidMove(BoardState[fromRow, fromCol], BoardState[toRow, toCol], this))
+                                {
+                                    continue;
+                                }
+
+                                // Try the move
+                                bool canEscapeCheck = CanMovePreventCheck(BoardState[fromRow, fromCol], BoardState[toRow, toCol], color);
+                                if (canEscapeCheck)
+                                {
+                                    return false; // Found a move that prevents check, so it's not checkmate
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // If we've checked all moves and none prevent check, it's checkmate
+            return true;
+        }
+
+        private bool CanMovePreventCheck(Tile fromTile, Tile toTile, Utils.Color color)
+        {
+            // Save original state
+            Piece? originalFromPiece = fromTile.Piece;
+            Piece? originalToPiece = toTile.Piece;
+
+            // Try making the move
+            toTile.Piece = fromTile.Piece;
+            fromTile.Piece = null;
+
+            // Check if the king is still in check after the move
+            bool stillInCheck = IsInCheck(color);
+
+            // Restore original state
+            fromTile.Piece = originalFromPiece;
+            toTile.Piece = originalToPiece;
+
+            // If not in check after the move, this move can prevent checkmate
+            return !stillInCheck;
         }
     }
 }

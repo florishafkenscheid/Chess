@@ -115,12 +115,11 @@ namespace ChessApp
                 moveHistory.AddLast(recentMove);
                 Serializer.Write(moveHistory);
 
-                fromTile.MovePiece(toTile);
-                gameBoard.UpdateFromMove(recentMove, currentPlayerColor);
+                gameBoard.UpdateFromMove(recentMove);
                 RedrawTiles(fromTile, toTile);
 
                 currentPlayerColor = (currentPlayerColor == Utils.Color.White) ? Utils.Color.Black : Utils.Color.White;
-                //MessageBox.Show($"Moved {fromTile.Piece} to ({toTile.Row}, {toTile.Col})");
+
                 if (currentPlayerColor != Utils.Color.White)
                 {
                     whiteLastMove.Text = moveHistory.Last.Value.ToString();
@@ -129,6 +128,9 @@ namespace ChessApp
                 {
                     BlackLastMove.Text = moveHistory.Last.Value.ToString();
                 }
+
+                // Check for check/checkmate after each move
+                CheckGameState();
 
                 // If it's now the AI's turn, make the AI move
                 if (currentPlayerColor == Utils.Color.Black) // Assuming AI plays as Black
@@ -146,7 +148,8 @@ namespace ChessApp
             }
             else
             {
-                MessageBox.Show("Invalid move");
+                MessageBox.Show($"Invalid move {new Move(fromTile, toTile)}");
+                ClearHighlightedTiles();
             }
         }
 
@@ -222,6 +225,25 @@ namespace ChessApp
             Move bestMove = await stockfishService.GetBestMove();
 
             MovePiece(bestMove.From, bestMove.To);
+        }
+
+        private void CheckGameState()
+        {
+            // Check if the current player is in check
+            bool isInCheck = gameBoard.IsInCheck(currentPlayerColor);
+
+            // Check if the current player is in checkmate
+            if (isInCheck && gameBoard.IsCheckmate(currentPlayerColor))
+            {
+                // Get the winning color (opposite of current player)
+                Utils.Color winningColor = currentPlayerColor == Utils.Color.White ? Utils.Color.Black : Utils.Color.White;
+                MessageBox.Show($"Checkmate! {winningColor} wins the game.");
+                Serializer.ClearMoves();
+            }
+            else if (isInCheck)
+            {
+                MessageBox.Show($"{currentPlayerColor} is in check!");
+            }
         }
     }
 }
