@@ -8,13 +8,11 @@ using ChessApp.Models.Board;
 using ChessApp.Models.Pieces;
 using ChessApp.Utils;
 
-namespace ChessApp.Pieces
+namespace ChessApp.Models.Pieces
 {
-    public class Queen : Piece
+    public class Queen(Utils.Color color) : Piece(color, 'q')
     {
-        public Queen(Utils.Color color) : base(color, 'q') { }
-
-        public override bool IsValidMove(Tile startTile, Tile endTile, Board board) =>
+        public override bool IsValidMove(Tile startTile, Tile endTile, Board.Board board) =>
             MoveValidator.IsDiagonalValid(startTile, endTile, board, this.Color)
             || MoveValidator.IsDiagonalValid(startTile, endTile, board, this.Color);
     }

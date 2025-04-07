@@ -1,7 +1,6 @@
 ﻿using System.Text;
 using ChessApp.Models.Moves;
 using ChessApp.Models.Pieces;
-using ChessApp.Pieces;
 using ChessApp.Utils;
 
 namespace ChessApp.Models.Board

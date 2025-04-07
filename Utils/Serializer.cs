@@ -42,6 +42,8 @@ namespace ChessApp.Utils
             return File.CreateText(path);
         }
 
+        // ... other code ...
+
         public static LinkedList<Move>? DeserializeMoveHistory()
         {
             string json;
@@ -58,11 +60,13 @@ namespace ChessApp.Utils
                 return null;
             }
 
-            MoveHistory? moveData = JsonSerializer.Deserialize<MoveHistory>(json, options);
-            if (moveData == null)
-            {
+            if (string.IsNullOrEmpty(json))
                 return null;
-            }
+
+            MoveHistory? moveData = JsonSerializer.Deserialize<MoveHistory>(json, options);
+
+            if (moveData == null)
+                return null;
 
             LinkedList<Move> moves = new(moveData.Moves.Select(moveString => new Move(moveString)));
             return moves;
