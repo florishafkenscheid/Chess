@@ -13,10 +13,11 @@ namespace ChessApp
     public partial class GameControl : UserControl
     {
         private const int GridSize = 8;
-        private int squareSize;
-        private Board gameBoard;
+        private readonly int squareSize;
+        private readonly Board gameBoard;
         private Utils.Color currentPlayerColor = Utils.Color.White; // Starting player is White
         private readonly LinkedList<Move> moveHistory;
+        private readonly List<Tile> highlightedTiles = new();
         private Tile? selectedTile;
         private StockfishService? stockfishService;
 
@@ -39,6 +40,7 @@ namespace ChessApp
                 stockfishService = new StockfishService();
             });
         }
+        
 
         // Handle the drawing of the chessboard
         // In GameControl.cs
@@ -91,7 +93,10 @@ namespace ChessApp
             if (fromTile.Piece != null && fromTile.Piece.Color == currentPlayerColor)
             {
                 selectedTile = fromTile;
-                MessageBox.Show($"Selected {fromTile.Piece} at ({fromTile.Row}, {fromTile.Col})");
+                //MessageBox.Show($"Selected {fromTile.Piece} at ({fromTile.Row}, {fromTile.Col})");
+                // Highlight the selected tile
+                HighlightValidMovesForSelectedTile(fromTile);
+
             }
             else
             {
@@ -112,8 +117,15 @@ namespace ChessApp
                 RedrawTiles(fromTile, toTile);
 
                 currentPlayerColor = (currentPlayerColor == Utils.Color.White) ? Utils.Color.Black : Utils.Color.White;
-
-                MessageBox.Show($"Moved {fromTile.Piece} to ({toTile.Row}, {toTile.Col})");
+                //MessageBox.Show($"Moved {fromTile.Piece} to ({toTile.Row}, {toTile.Col})");
+                if (currentPlayerColor != Utils.Color.White)
+                {
+                    whiteLastMove.Text = moveHistory.Last.Value.ToString();
+                }
+                else
+                {
+                    BlackLastMove.Text = moveHistory.Last.Value.ToString();
+                }
 
                 // If it's now the AI's turn, make the AI move
                 if (currentPlayerColor == Utils.Color.Black) // Assuming AI plays as Black
@@ -122,7 +134,7 @@ namespace ChessApp
                     Task.Run(() =>
                     {
                         // Need to use Invoke since we're updating UI from a different thread
-                        Invoke((MethodInvoker) async delegate
+                        Invoke((MethodInvoker)async delegate
                         {
                             await MakeStockfishMove();
                         });
@@ -140,12 +152,41 @@ namespace ChessApp
             using Graphics g = this.CreateGraphics();
             // Redraw the clicked tile
             RedrawTile(g, toTile);
-
+            // Clear highlighted tiles
+            ClearHighlightedTiles();
             // Redraw the source tile if it exists
             if (fromTile != null)
             {
                 RedrawTile(g, fromTile);
             }
+        }
+
+        private void HighlightValidMovesForSelectedTile(Tile selectedTile)
+        {
+            using Graphics g = this.CreateGraphics();
+
+            for (int row = 0; row < GridSize; row++)
+            {
+                for (int col = 0; col < GridSize; col++)
+                {
+                    Tile toTile = gameBoard.BoardState[row, col];
+                    if (selectedTile.Piece != null && selectedTile.Piece.IsValidMove(selectedTile, toTile, gameBoard))
+                    {
+                        highlightedTiles.Add(toTile);
+                        g.FillRectangle(new SolidBrush(System.Drawing.Color.LightGreen), col * squareSize, row * squareSize, squareSize, squareSize);
+                    }
+                }
+            }
+        }
+        private void ClearHighlightedTiles()
+        {
+            using Graphics g = this.CreateGraphics();
+            foreach (Tile tile in highlightedTiles)
+            {
+                RedrawTile(g, tile);
+
+            }
+            highlightedTiles.Clear();
         }
 
         private void RedrawTile(Graphics g, Tile tile)
@@ -162,6 +203,8 @@ namespace ChessApp
                 Image pieceImage = Image.FromFile($"Images/{tile.Piece}.png");
                 g.DrawImage(pieceImage, col * squareSize, row * squareSize, squareSize, squareSize);
             }
+
+
         }
 
         private async Task MakeStockfishMove()
@@ -179,5 +222,7 @@ namespace ChessApp
 
             MovePiece(bestMove.From, bestMove.To);
         }
+
+        
     }
 }

@@ -37,7 +37,7 @@ namespace ChessApp.Utils
             throw new NotImplementedException();
         }
 
-        public static StreamWriter CreateFile(string path)
+       public static StreamWriter CreateFile(string path)
         {
             return File.CreateText(path);
         }
@@ -47,9 +47,17 @@ namespace ChessApp.Utils
         public static LinkedList<Move>? DeserializeMoveHistory()
         {
             string json;
+            if (!File.Exists(GAMES_PATH))
+            {
+                CreateFile(GAMES_PATH);
+            }
             using (StreamReader reader = File.OpenText(GAMES_PATH))
             {
                 json = reader.ReadToEnd();
+            }
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                return null;
             }
 
             if (string.IsNullOrEmpty(json))

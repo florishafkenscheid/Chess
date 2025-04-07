@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DataSet1.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Images\White Queen.png" />
     <None Remove="Images\White Rook.png" />
   </ItemGroup>
@@ -53,7 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Sharpfish\Sharpfish\Sharpfish.csproj" />
+    <ProjectReference Include="..\Sharpfish\Sharpfish\Sharpfish.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -69,6 +73,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="DataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>
