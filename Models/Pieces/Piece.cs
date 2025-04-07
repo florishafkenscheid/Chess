@@ -1,3 +1,4 @@
+﻿using ChessApp.Utils;
 ﻿using ChessApp.Models.Board;
 
 namespace ChessApp.Models.Pieces

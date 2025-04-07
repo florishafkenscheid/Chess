@@ -3,12 +3,10 @@ using ChessApp.Models.Board;
 using ChessApp.Models.Pieces;
 using ChessApp.Utils;
 
-namespace ChessApp.Pieces
+namespace ChessApp.Models.Pieces
 {
-    public class Rook : Piece
+    public class Rook(Utils.Color color) : Piece(color, 'r')
     {
-        public Rook(Utils.Color color) : base(color, 'r') { }
-
-        public override bool IsValidMove(Tile startTile, Tile endTile, Board board) => MoveValidator.IsStraightValid(startTile, endTile, board, this.Color);
+        public override bool IsValidMove(Tile startTile, Tile endTile, Board.Board board) => MoveValidator.IsStraightValid(startTile, endTile, board, Color);
     }
 }
