@@ -47,8 +47,14 @@ namespace ChessApp.Utils
             if (startTile.Row == endTile.Row)
             {
                 int step = startTile.Col < endTile.Col ? 1 : -1;
+
+                int maxRow = board.BoardState.GetLength(0) - 1;
+
                 for (int col = startTile.Col + step; col != endTile.Col; col += step)
                 {
+                    if (col < 0 || col > maxRow)
+                        return false;
+
                     if (board.BoardState[startTile.Row, col].Piece != null)
                         return false;
                 }

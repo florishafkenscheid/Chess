@@ -27,6 +27,11 @@ namespace ChessApp.Models
 
         public void MovePiece(Tile to)
         {
+            if (Piece == null)
+            {
+                throw new InvalidOperationException("Cannot move from an empty tile");
+            }
+
             to.Piece = this.Piece;
             this.Piece = null;
         }

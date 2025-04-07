@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -13,7 +14,7 @@ namespace ChessApp.Utils
     {
         private static readonly JsonSerializerOptions options = new() { WriteIndented = true };
         private const string GAMES_PATH = @"..\..\..\data.json"; // Same place as stockfish.exe
-        private const string CONFIG_PATH = @"..\..\..\config.json";
+        private const string CONFIG_PATH = @"..\..\..\config.json"; // For options
 
         private record MoveHistory(LinkedList<string> Moves); // Needed for serialization to generate a better JSON outcome
 
@@ -70,6 +71,12 @@ namespace ChessApp.Utils
 
             LinkedList<Move> moves = new(moveData.Moves.Select(moveString => new Move(moveString)));
             return moves;
+        }
+
+        public static void ClearMoves()
+        {
+            using StreamWriter writer = CreateFile(GAMES_PATH);
+            writer.Write(string.Empty);
         }
     }
 }
