@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ChessApp.Models.Board;
 
 namespace ChessApp.Models.Moves;
+
 public class Move
 {
     public Tile From { get; }

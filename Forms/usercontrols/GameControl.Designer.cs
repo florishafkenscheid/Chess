@@ -1,4 +1,6 @@
-﻿namespace ChessApp
+﻿using ChessApp.Utils;
+
+namespace ChessApp
 {
     partial class GameControl
     {
