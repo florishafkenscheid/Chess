@@ -57,7 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sharpfish\Sharpfish\Sharpfish.csproj" />
+    <ProjectReference Include="..\..\Sharpfish\Sharpfish\Sharpfish.csproj" />
   </ItemGroup>
 
   <ItemGroup>

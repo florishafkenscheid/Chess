@@ -20,8 +20,15 @@ namespace ChessApp.Utils
             int currentRow = startTile.Row + rowStep;
             int currentCol = startTile.Col + colStep;
 
+            int maxRow = board.BoardState.GetLength(0) - 1;
+            int maxCol = board.BoardState.GetLength(1) - 1;
+
             while (currentRow != endTile.Row && currentCol != endTile.Col)
             {
+                // Check if current indices are within bounds
+                if (currentRow < 0 || currentRow > maxRow || currentCol < 0 || currentCol > maxCol)
+                    return false;
+
                 if (board.BoardState[currentRow, currentCol].Piece != null)
                     return false;
 
@@ -119,8 +126,5 @@ namespace ChessApp.Utils
             Piece? destinationPiece = board.BoardState[endTile.Row, endTile.Col].Piece;
             return destinationPiece == null || destinationPiece.Color != color;
         }
-
-
-
     }
 }
