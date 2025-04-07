@@ -13,21 +13,24 @@ namespace ChessApp
     public partial class GameControl : UserControl
     {
         private const int GridSize = 8;
-        private readonly int squareSize;
+        private readonly int squareSize = 50;
         private readonly Board gameBoard;
         private Utils.Color currentPlayerColor = Utils.Color.White; // Starting player is White
         private readonly LinkedList<Move> moveHistory;
-        private readonly List<Tile> highlightedTiles = new();
+        private readonly List<Tile> highlightedTiles = [];
         private Tile? selectedTile;
         private StockfishService? stockfishService;
 
-        public GameControl(string? fen = null)
+        public GameControl()
         {
             InitializeComponent();
-            squareSize = 100; // Square size
-            gameBoard = fen == null ? new Board() : new Board(fen);
-            currentPlayerColor = gameBoard.ColorToMove; // If Board(fen) is called, this might be black, conflicting with the default set above
+            gameBoard = new Board(); // Initialize an empty board first
             moveHistory = Serializer.DeserializeMoveHistory() ?? new LinkedList<Move>();
+            if (moveHistory.Count > 0)
+            {
+                gameBoard = new Board(moveHistory); // Overwrite the board if there's a move history
+            }
+            currentPlayerColor = gameBoard.ColorToMove; // If Board(fen) is called, this might be black, conflicting with the default set above
 
             InitializeStockfishAsync();
 
@@ -203,8 +206,6 @@ namespace ChessApp
                 Image pieceImage = Image.FromFile($"Images/{tile.Piece}.png");
                 g.DrawImage(pieceImage, col * squareSize, row * squareSize, squareSize, squareSize);
             }
-
-
         }
 
         private async Task MakeStockfishMove()
@@ -222,7 +223,5 @@ namespace ChessApp
 
             MovePiece(bestMove.From, bestMove.To);
         }
-
-        
     }
 }
