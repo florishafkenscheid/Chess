@@ -49,6 +49,7 @@
             roundButton3.TabIndex = 4;
             roundButton3.Text = "Home";
             roundButton3.UseVisualStyleBackColor = false;
+            roundButton3.Click += roundButton3_Click;
             // 
             // roundButton2
             // 
@@ -63,6 +64,7 @@
             roundButton2.TabIndex = 3;
             roundButton2.Text = "Resign";
             roundButton2.UseVisualStyleBackColor = false;
+            roundButton2.Click += roundButton2_Click;
             // 
             // whiteLastMove
             // 

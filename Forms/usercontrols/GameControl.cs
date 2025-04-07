@@ -13,7 +13,7 @@ namespace ChessApp
     public partial class GameControl : UserControl
     {
         private const int GridSize = 8;
-        private readonly int squareSize = 50;
+        private readonly int squareSize = 100;
         private readonly Board gameBoard;
         private Utils.Color currentPlayerColor = Utils.Color.White; // Starting player is White
         private readonly LinkedList<Move> moveHistory;
@@ -43,7 +43,7 @@ namespace ChessApp
                 stockfishService = new StockfishService();
             });
         }
-        
+
 
         // Handle the drawing of the chessboard
         // In GameControl.cs
@@ -244,6 +244,20 @@ namespace ChessApp
             {
                 MessageBox.Show($"{currentPlayerColor} is in check!");
             }
+        }
+
+        private void roundButton2_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("u have resigned.");
+            Serializer.ClearMoves();
+        }
+
+        private void roundButton3_Click(object sender, EventArgs e)
+        {
+            Form1 form1 = new Form1();
+            form1.FormClosed += (s, args) => Application.Exit();
+            this.FindForm()?.Hide();
+            form1.Show();
         }
     }
 }
