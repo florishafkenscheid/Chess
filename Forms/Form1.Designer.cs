@@ -50,12 +50,12 @@ namespace ChessApp
             // 
             // roundButton1
             // 
-            RoundButton1.BackColor = Color.FromArgb(132, 221, 99);
-            RoundButton1.BorderColor = Color.Transparent;
+            RoundButton1.BackColor = System.Drawing.Color.FromArgb(132, 221, 99);
+            RoundButton1.BorderColor = System.Drawing.Color.Transparent;
             RoundButton1.CornerRadius = 20;
             RoundButton1.FlatStyle = FlatStyle.Flat;
             RoundButton1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            RoundButton1.ForeColor = Color.White;
+            RoundButton1.ForeColor = System.Drawing.Color.White;
             RoundButton1.Location = new Point(565, 487);
             RoundButton1.Name = "roundButton1";
             RoundButton1.Size = new Size(784, 62);
@@ -66,12 +66,12 @@ namespace ChessApp
             // 
             // roundButton2
             // 
-            RoundButton2.BackColor = Color.FromArgb(84, 84, 84);
-            RoundButton2.BorderColor = Color.Transparent;
+            RoundButton2.BackColor = System.Drawing.Color.FromArgb(84, 84, 84);
+            RoundButton2.BorderColor = System.Drawing.Color.Transparent;
             RoundButton2.CornerRadius = 20;
             RoundButton2.FlatStyle = FlatStyle.Flat;
             RoundButton2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            RoundButton2.ForeColor = Color.White;
+            RoundButton2.ForeColor = System.Drawing.Color.White;
             RoundButton2.Location = new Point(565, 566);
             RoundButton2.Name = "roundButton2";
             RoundButton2.Size = new Size(382, 62);
@@ -82,12 +82,12 @@ namespace ChessApp
             // 
             // roundButton3
             // 
-            RoundButton3.BackColor = Color.FromArgb(230, 95, 92);
-            RoundButton3.BorderColor = Color.Transparent;
+            RoundButton3.BackColor = System.Drawing.Color.FromArgb(230, 95, 92);
+            RoundButton3.BorderColor = System.Drawing.Color.Transparent;
             RoundButton3.CornerRadius = 20;
             RoundButton3.FlatStyle = FlatStyle.Flat;
             RoundButton3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            RoundButton3.ForeColor = Color.White;
+            RoundButton3.ForeColor = System.Drawing.Color.White;
             RoundButton3.Location = new Point(967, 566);
             RoundButton3.Name = "roundButton3";
             RoundButton3.Size = new Size(382, 62);
@@ -100,7 +100,7 @@ namespace ChessApp
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(238, 240, 242);
+            BackColor = System.Drawing.Color.FromArgb(238, 240, 242);
             ClientSize = new Size(1894, 1009);
             Controls.Add(RoundButton3);
             Controls.Add(RoundButton2);
