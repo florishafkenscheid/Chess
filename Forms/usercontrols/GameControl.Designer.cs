@@ -42,11 +42,11 @@ namespace ChessApp
             // 
             // roundButton3
             // 
-            roundButton3.BackColor = Color.FromArgb(84, 84, 84);
-            roundButton3.BorderColor = Color.Transparent;
+            roundButton3.BackColor = System.Drawing.Color.FromArgb(84, 84, 84);
+            roundButton3.BorderColor = System.Drawing.Color.Transparent;
             roundButton3.CornerRadius = 40;
             roundButton3.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            roundButton3.ForeColor = Color.White;
+            roundButton3.ForeColor = System.Drawing.Color.White;
             roundButton3.Location = new Point(968, 783);
             roundButton3.Name = "roundButton3";
             roundButton3.Size = new Size(903, 65);
@@ -57,11 +57,11 @@ namespace ChessApp
             // 
             // roundButton2
             // 
-            roundButton2.BackColor = Color.FromArgb(230, 95, 92);
-            roundButton2.BorderColor = Color.Transparent;
+            roundButton2.BackColor = System.Drawing.Color.FromArgb(230, 95, 92);
+            roundButton2.BorderColor = System.Drawing.Color.Transparent;
             roundButton2.CornerRadius = 40;
             roundButton2.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            roundButton2.ForeColor = Color.White;
+            roundButton2.ForeColor = System.Drawing.Color.White;
             roundButton2.Location = new Point(968, 868);
             roundButton2.Name = "roundButton2";
             roundButton2.Size = new Size(903, 65);

@@ -1,4 +1,6 @@
-﻿namespace ChessApp
+﻿using ChessApp.Utils;
+
+namespace ChessApp
 {
     partial class Options
     {
@@ -101,7 +103,7 @@
             // 
             // roundButton1
             // 
-            roundButton1.BorderColor = Color.Transparent;
+            roundButton1.BorderColor = System.Drawing.Color.Transparent;
             roundButton1.CornerRadius = 40;
             roundButton1.Location = new Point(445, 505);
             roundButton1.Name = "roundButton1";

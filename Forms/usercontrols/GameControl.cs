@@ -15,46 +15,38 @@ public partial class GameControl : UserControl
     private readonly List<Tile> highlightedTiles = [];
     private Tile? selectedTile;
     private StockfishService? stockfishService;
+    private bool isResigned = false;
 
     public GameControl()
     {
-        private const int GridSize = 8;
-        private readonly int squareSize = 100;
-        private readonly Board gameBoard;
-        private Utils.Color currentPlayerColor = Utils.Color.White; // Starting player is White
-        private readonly LinkedList<Move> moveHistory;
-        private readonly List<Tile> highlightedTiles = [];
-        private Tile? selectedTile;
-        private StockfishService? stockfishService;
-        private bool isResigned = false;
-
-        public GameControl()
+        InitializeComponent();
+        gameBoard = new Board(); // Initialize an empty board first
+        moveHistory = Serializer.DeserializeMoveHistory() ?? new LinkedList<Move>();
+        if (moveHistory.Count > 0)
         {
-            InitializeComponent();
-            gameBoard = new Board(); // Initialize an empty board first
-            moveHistory = Serializer.DeserializeMoveHistory() ?? new LinkedList<Move>();
-            if (moveHistory.Count > 0)
+            gameBoard = new Board(moveHistory); // Overwrite the board if there's a move history
+            whiteLastMove.Text = moveHistory.Last.Value.ToString();
+            if (moveHistory.Count > 1)
             {
-                gameBoard = new Board(moveHistory); // Overwrite the board if there's a move history
-                whiteLastMove.Text = moveHistory.Last.Value.ToString();
-                if (moveHistory.Count > 1)
-                {
-                    var secondToLastMove = moveHistory.Last.Previous.Value;
-                    BlackLastMove.Text = secondToLastMove.ToString();
-                }
+                var secondToLastMove = moveHistory.Last.Previous.Value;
+                BlackLastMove.Text = secondToLastMove.ToString();
             }
-            currentPlayerColor = gameBoard.ColorToMove; // If Board(fen) is called, this might be black, conflicting with the default set above
+        }
+        currentPlayerColor = gameBoard.ColorToMove; // If Board(fen) is called, this might be black, conflicting with the default set above
 
         InitializeStockfishAsync();
 
         MouseClick += new MouseEventHandler(Game_MouseClick);
     }
+
     private async void InitializeStockfishAsync()
     {
         await Task.Run(() =>
+        {
             stockfishService = new StockfishService();
         });
     }
+
 
     // Handle the drawing of the chessboard
     // In GameControl.cs
@@ -287,35 +279,31 @@ public partial class GameControl : UserControl
         {
             label4.Text = $"{currentPlayerColor} is in check";
         }
+    }
 
-        private void roundButton2_Click(object sender, EventArgs e)
+    private void roundButton2_Click(object sender, EventArgs e)
+    {
+        if (isResigned == false)
         {
-            if (isResigned == false)
-            {
-                MessageBox.Show("You have resigned");
-                isResigned = true;
-                // Clear the move history
-                Serializer.ClearMoves();
-            }
-            else
-            {
-                Form1 form1 = new Form1();
-                form1.FormClosed += (s, args) => Application.Exit();
-                this.FindForm()?.Hide();
-                form1.Show();
-            }
+            MessageBox.Show("You have resigned");
+            isResigned = true;
+            // Clear the move history
+            Serializer.ClearMoves();
         }
-
-        private void roundButton3_Click(object sender, EventArgs e)
+        else
         {
             Form1 form1 = new Form1();
             form1.FormClosed += (s, args) => Application.Exit();
             this.FindForm()?.Hide();
             form1.Show();
         }
-        private void displayGameState()
-        {
+    }
 
-        }
+    private void roundButton3_Click(object sender, EventArgs e)
+    {
+        Form1 form1 = new Form1();
+        form1.FormClosed += (s, args) => Application.Exit();
+        this.FindForm()?.Hide();
+        form1.Show();
     }
 }
