@@ -12,16 +12,24 @@ namespace ChessApp.Utils
 {
     internal static class Serializer
     {
-        private static readonly JsonSerializerOptions options = new() { WriteIndented = true };
-        private const string GAMES_PATH = @"..\..\..\data.json"; // Same place as stockfish.exe
-        private const string CONFIG_PATH = @"..\..\..\config.json"; // For options
+        private static readonly JsonSerializerOptions options = new() { WriteIndented = true,  DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
 
-        private record MoveHistory(LinkedList<string> Moves); // Needed for serialization to generate a better JSON outcome
+        private const string GAMES_PATH = @"..\..\..\data.json";
+        private const string CONFIG_PATH = @"..\..\..\config.json";
 
-        public static void Write(LinkedList<Move> moves) // Needs second parameter for options, but as stated below that is not implemented yet
+        private record MoveHistory(LinkedList<string> Moves);
+        private record EngineOptions(EngineOption[] Options);
+
+        public static void Write(LinkedList<Move> moves)
         {
             using StreamWriter writer = CreateFile(GAMES_PATH);
             writer.Write(SerializeMoveHistory(moves));
+        }
+
+        public static void Write(EngineOption[] engineOptions)
+        {
+            using StreamWriter writer = CreateFile(CONFIG_PATH);
+            writer.Write(SerializeOptions(engineOptions));
         }
 
         public static string SerializeMoveHistory(LinkedList<Move> moves)
@@ -33,17 +41,18 @@ namespace ChessApp.Utils
             return JsonSerializer.Serialize(moveData, options);
         }
 
-        public static string SerializeOptions() // Options still need to be implemented, then this can be done
+        public static string SerializeOptions(EngineOption[] engineOptions)
         {
-            throw new NotImplementedException();
+            EngineOptions optionData = new(
+                Options: [.. engineOptions.Where(option => !string.IsNullOrWhiteSpace(option.Name) && !string.IsNullOrWhiteSpace(option.Value))]
+            );
+            return JsonSerializer.Serialize(optionData, options);
         }
 
-       public static StreamWriter CreateFile(string path)
+        public static StreamWriter CreateFile(string path)
         {
             return File.CreateText(path);
         }
-
-        // ... other code ...
 
         public static LinkedList<Move>? DeserializeMoveHistory()
         {
@@ -56,13 +65,10 @@ namespace ChessApp.Utils
             {
                 json = reader.ReadToEnd();
             }
-            if (string.IsNullOrWhiteSpace(json))
+            if (string.IsNullOrWhiteSpace(json) || string.IsNullOrEmpty(json))
             {
                 return null;
             }
-
-            if (string.IsNullOrEmpty(json))
-                return null;
 
             MoveHistory? moveData = JsonSerializer.Deserialize<MoveHistory>(json, options);
 
@@ -71,6 +77,26 @@ namespace ChessApp.Utils
 
             LinkedList<Move> moves = new(moveData.Moves.Select(moveString => new Move(moveString)));
             return moves;
+        }
+
+        public static EngineOption[]? DeserializeOptions()
+        {
+            string json;
+            if (!File.Exists(CONFIG_PATH))
+            {
+                CreateFile(CONFIG_PATH);
+            }
+            using (StreamReader reader = File.OpenText(CONFIG_PATH))
+            {
+                json = reader.ReadToEnd();
+            }
+            if (string.IsNullOrWhiteSpace(json) || string.IsNullOrEmpty(json))
+            {
+                return null;
+            }
+
+            EngineOptions? engineOptionsWrapper = JsonSerializer.Deserialize<EngineOptions>(json, options);
+            return engineOptionsWrapper?.Options;
         }
 
         public static void ClearMoves()

@@ -111,7 +111,7 @@ namespace ChessApp
             roundButton1.TabIndex = 6;
             roundButton1.Text = "Save settings";
             roundButton1.UseVisualStyleBackColor = true;
-            roundButton1.Click += roundButton1_Click;
+            roundButton1.Click += RoundButton1_Click;
             // 
             // Options
             // 

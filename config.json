@@ -1,0 +1,16 @@
+{
+  "Options": [
+    {
+      "Name": "Skill Level",
+      "Value": "1"
+    },
+    {
+      "Name": "Threads",
+      "Value": "8"
+    },
+    {
+      "Name": "Hash",
+      "Value": "1024"
+    }
+  ]
+}

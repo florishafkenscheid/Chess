@@ -50,9 +50,14 @@ namespace ChessApp.Services
             await _engine.SetPosition(moves);
         }
 
-        public async Task SetOption(string key, string value) // Idea: Option struct with override ToString()?
+        public async Task SetOption(string key, string value)
         {
             await _engine.SetOption(key, value);
+        }
+
+        public async Task SetOption(EngineOption engineOption)
+        {
+            await _engine.SetOption(engineOption.Name, engineOption.Value);
         }
 
         public async Task<Dictionary<int, string[]>> GetPV()
