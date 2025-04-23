@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Microsoft.VisualBasic.Devices;
 using ChessApp.Services;
+using ChessApp.Utils;
 
 namespace ChessApp
 {
@@ -60,37 +61,26 @@ namespace ChessApp
             }
         }
 
-        private async void roundButton1_Click(object sender, EventArgs e)
+        private void RoundButton1_Click(object sender, EventArgs e)
         {
-            try
+            // Create and configure EngineOption instances
+            var options = new[]
             {
-                int skillLevel = (int)SkillLevelNumup.Value;
-                int threads = (int)threadsNumericUpDown.Value;
-                int hash = (int)ramNumericUpDown.Value;
+                new EngineOption { Name = "Skill Level", Value = SkillLevelNumup.Value.ToString() },
+                new EngineOption { Name = "Threads", Value = threadsNumericUpDown.Value.ToString() },
+                new EngineOption { Name = "Hash", Value = ramNumericUpDown.Value.ToString() }
+            };
 
-                await Task.Run(async () =>
-                {
-                    using var stockfishService = new StockfishService();
-                    if (await stockfishService.IsReady())
-                    {
-                        try { await stockfishService.SetOption("Skill Level", skillLevel.ToString()); }
-                        catch (Exception ex) { MessageBox.Show("Skill Level failed:\n" + ex.Message); }
+            // Serialize all options
+            Serializer.Write(options);
 
-                        try { await stockfishService.SetOption("Threads", threads.ToString()); }
-                        catch (Exception ex) { MessageBox.Show("Threads failed:\n" + ex.Message); }
-
-                        try { await stockfishService.SetOption("Hash", hash.ToString()); }
-                        catch (Exception ex) { MessageBox.Show("Hash failed:\n" + ex.Message); }
-                    }
-                });
-
-                this.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Outer Error:\n" + ex.Message);
-            }
+            this.Close();
         }
+    }
 
+    struct EngineOption
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
     }
 }

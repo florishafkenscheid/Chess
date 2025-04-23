@@ -12,6 +12,7 @@ public partial class GameControl : UserControl
     private readonly Board gameBoard;
     private Utils.Color currentPlayerColor = Utils.Color.White; // Starting player is White
     private readonly LinkedList<Move> moveHistory;
+    private readonly EngineOption[] engineOptions;
     private readonly List<Tile> highlightedTiles = [];
     private Tile? selectedTile;
     private StockfishService? stockfishService;
@@ -22,6 +23,7 @@ public partial class GameControl : UserControl
         InitializeComponent();
         gameBoard = new Board(); // Initialize an empty board first
         moveHistory = Serializer.DeserializeMoveHistory() ?? new LinkedList<Move>();
+        engineOptions = Serializer.DeserializeOptions() ?? [];
         if (moveHistory.Count > 0)
         {
             gameBoard = new Board(moveHistory); // Overwrite the board if there's a move history
@@ -44,6 +46,11 @@ public partial class GameControl : UserControl
         await Task.Run(() =>
         {
             stockfishService = new StockfishService();
+
+            for (int i = 0; i < engineOptions.Length; i++)
+            {
+                _ = stockfishService.SetOption(engineOptions[i]);
+            }
         });
     }
 
